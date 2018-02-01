@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.haitao55.spider.common.dao.impl.mysql.HeartbeatMapper">
+	
+	<select id="selectAllLatest" resultType="com.haitao55.spider.common.dos.HeartbeatDO">
+		select  a.time as time, a.ip as ip,
+				a.proc_id as procId, a.thread_count as threadCount
+		from heartbeat a,(
+			select ip,max(time) time
+		    from heartbeat
+		    group by ip) b
+		where a.ip = b.ip
+		and a.time = b.time
+		order by time desc
+	</select>
+</mapper> 

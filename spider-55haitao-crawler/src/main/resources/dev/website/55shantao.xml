@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rules xmlns="http://www.55haitao.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+	<rule regex=".*www.55shantao.com.*" grade="0">
+		<_55shantao input="${html}" output="retbody" />
+		<output channel="kafka" fields="retbody" />
+	</rule>
+</rules>

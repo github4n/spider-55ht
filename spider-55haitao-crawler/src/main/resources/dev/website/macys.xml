@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rules xmlns="http://www.55haitao.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<rule grade="0">
+		<selectmacysurls input="${doc}"  css="div#globalMastheadFlyout ul.flexLabelLinksContainer li a" baseuri="http://www1.macys.com" attr="abs:href" type="LINK" output="newurls" grade="1"/>
+	</rule>	
+
+	<rule grade="1">
+		<selectmacysurls input="${doc}"  css="div#browse_womens_default_product ul>li div.fullColorOverlayOff>a" baseuri="http://www1.macys.com"  attr="abs:href" regex="#fn.*" replacement="" type="ITEM"  output="newurls" grade="3"/>
+		<selectmacyspages input="${doc}" cssTemplateUrl="link[rel=canonical]" attrTemplateUrl="abs:href" cssTotalPages="div#paginateBottom a:nth-last-of-type(3)" attrTotalPages="text" replaceRegex="&amp;.*" replaceFormat=""  startIndex="1" output="newurls" grade="2"/>
+	</rule>
+        <rule grade="2">
+                <selectmacysurls input="${doc}"  css="div#browse_womens_default_product ul>li div.fullColorOverlayOff>a" baseuri="http://www1.macys.com" regex="#fn.*" replacement="" attr="abs:href" type="ITEM"  output="newurls" grade="3"/>
+        </rule>
+
+        <rule regex=".*www.macys.com.*" grade="3">
+                <macys input="${doc}" output="retbody" />
+		<output channel="kafka" fields="retbody" />
+        </rule>
+
+</rules>

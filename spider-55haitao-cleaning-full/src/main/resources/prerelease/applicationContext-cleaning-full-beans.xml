@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:cache="http://www.springframework.org/schema/cache"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-3.2.xsd
+    http://www.springframework.org/schema/mvc
+    http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+    http://www.springframework.org/schema/aop
+    http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+    http://www.springframework.org/schema/data/mongo
+    http://www.springframework.org/schema/data/mongo/spring-mongo-1.4.xsd
+    http://www.springframework.org/schema/cache
+    http://www.springframework.org/schema/cache/spring-cache-3.2.xsd
+    http://www.springframework.org/schema/util
+    http://www.springframework.org/schema/util/spring-util-3.2.xsd">
+    
+    <mvc:annotation-driven/>
+    
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>file:config/config.properties</value>
+            </list>
+        </property>
+    </bean>
+    
+    <!-- mongodb config -->
+    <mongo:mongo host="${mongo.host}" port="${mongo.port}"/>
+    <mongo:db-factory id="mongoDbFactory" mongo-ref="mongo" dbname="${mongo.dbname}" username="${mongo.user}" password="${mongo.passwd}"/>
+    <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+        <constructor-arg name="mongoDbFactory" ref="mongoDbFactory"/>
+    </bean>
+    
+    <bean id="baseMongoDAO" class="com.haitao55.spider.common.dao.impl.mongo.BaseMongoDAO" abstract="true" >
+	 	<property name="mongoTemplate" ref="mongoTemplate" />
+	</bean>
+    
+    <bean id="itemDAO" class="com.haitao55.spider.common.dao.impl.mongo.ItemDAOImpl" parent="baseMongoDAO" />
+    
+    <!-- services -->
+    <bean id="bootstrap" class="com.haitao55.spider.cleaning_full.Bootstrap" init-method="init">
+        <property name="threadPoolProps">
+        	<map>
+        		<entry key="corePoolSize" value="${cleaning.full.threadPoolProps.corePoolSize}" />
+        		<entry key="maximumPoolSize" value="${cleaning.full.threadPoolProps.maximumPoolSize}" />
+        		<entry key="keepAliveTime" value="${cleaning.full.threadPoolProps.keepAliveTime}" />
+        		<entry key="workQueueSize" value="${cleaning.full.threadPoolProps.workQueueSize}" />
+        	</map>
+        </property>
+        <property name="itemDAO" ref="itemDAO" />
+        <property name="ignoringTaskIds" value="${cleaning.full.ignoringTaskIds}" />
+        <property name="outputRootPath" value="${cleaning.full.output.root.path}" />
+    </bean>
+</beans>

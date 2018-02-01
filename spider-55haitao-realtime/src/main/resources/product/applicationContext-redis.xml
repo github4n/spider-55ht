@@ -1,0 +1,33 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd">
+
+	<!-- 构建连接池配置信息 -->
+	<bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+		<!-- 最大连接数 -->
+		<property name="maxTotal" value="600"/>
+		<property name="maxIdle" value="300" />
+		<property name="timeBetweenEvictionRunsMillis" value="30000" />
+        <property name="minEvictableIdleTimeMillis" value="30000" />
+	</bean>
+	
+	<!-- 定义集群连接池 -->
+	<bean id="shardedJedisPool" class="redis.clients.jedis.ShardedJedisPool" destroy-method="close">
+		<!-- 第一个参数 -->
+		<constructor-arg index="0" ref="jedisPoolConfig"/>
+		<constructor-arg index="1">
+			<list>
+				<!-- 第一个节点 -->
+				<bean class="redis.clients.jedis.JedisShardInfo">
+					<constructor-arg name="host" value="${redis}" />
+				</bean>
+			</list>
+		</constructor-arg>
+	</bean>
+
+</beans>

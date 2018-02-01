@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop 
+		http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/tx 
+		http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/data/mongo
+    	http://www.springframework.org/schema/data/mongo/spring-mongo.xsd">
+    	
+	<!-- 开启注解扫描 -->
+	<context:component-scan base-package="com.haitao55.spider.image.service,com.haitao55.spider.common.service,com.haitao55.spider.common.dao,com.haitao55.spider.realtime" />
+	<context:annotation-config />
+
+	<!-- 使用properties文件，使初始化数据的配置集中在一处 -->
+	<bean id="configProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="locations">
+			<list>
+				<value>classpath*:config.properties</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer">
+		<property name="properties" ref="configProperties" />
+	</bean>
+
+	<!-- spring 整合mybatis -->
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+		<property name="url" value="jdbc:mysql://${mysql.host}:${mysql.port}/${mysql.dbname}" />
+		<property name="driverClassName" value="${mysql.driverClassName}" />
+		<property name="username" value="${mysql.username}" />
+		<property name="password" value="${mysql.password}" />
+		<!-- 配置初始化大小、最小、最大 -->
+	    <property name="initialSize" value="${mysql.initialSize}" />
+	    <property name="minIdle" value="${mysql.minIdle}" />
+	    <property name="maxActive" value="${mysql.maxActive}" />
+	 
+	    <!-- 配置获取连接等待超时的时间 -->
+	    <property name="maxWait" value="${mysql.maxWait}" />
+	 
+	    <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+	    <property name="timeBetweenEvictionRunsMillis" value="${mysql.timeBetweenEvictionRunsMillis}" />
+	 
+	    <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+	    <property name="minEvictableIdleTimeMillis" value="${mysql.minEvictableIdleTimeMillis}" />
+	 
+	    <property name="validationQuery" value="${mysql.validationQuery}" />
+	    <property name="testWhileIdle" value="${mysql.testWhileIdle}" />
+	    <property name="testOnBorrow" value="${mysql.testOnBorrow}" />
+	    <property name="testOnReturn" value="${mysql.testOnReturn}" />
+	</bean>
+
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="mapperLocations" value="classpath:mappers/*.xml"></property>
+		<property name="typeAliasesPackage" value="com.haitao55.spider.common.dos" />
+		<property name="plugins">
+			<array>
+				<bean class="com.github.pagehelper.PageHelper">
+					<!-- 这里的几个配置主要演示如何使用，如果不理解，一定要去掉下面的配置 -->
+					<property name="properties">
+						<value>
+							dialect=mysql
+							reasonable=true
+							supportMethodsArguments=true
+							params=count=countSql
+							autoRuntimeDialect=true
+						</value>
+					</property>
+				</bean>
+				<bean class="com.haitao55.spider.common.interceptors.MybatisInterceptor"></bean>
+			</array>
+		</property>
+	</bean>
+
+	<!-- Mapper接口所在包名，Spring会自动查找其下的类 -->
+	<bean class="tk.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.haitao55.spider.common.dao.impl.mysql" />
+		<!-- 3.2.2版本新特性，markerInterface可以起到mappers配置的作用，详细情况需要看Marker接口类 -->
+		<property name="markerInterface" value="com.haitao55.spider.common.util.MyMapper" />
+	</bean>
+
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate" scope="prototype">
+		<constructor-arg index="0" ref="sqlSessionFactory" />
+	</bean>
+
+	<!-- 事务管理器 -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="delete*" propagation="REQUIRED" read-only="false" />
+			<tx:method name="insert*" propagation="REQUIRED" read-only="false" />
+			<tx:method name="update*" propagation="REQUIRED" read-only="false" />
+			<tx:method name="find*" propagation="SUPPORTS" />
+			<tx:method name="get*" propagation="SUPPORTS" />
+			<tx:method name="select*" propagation="SUPPORTS" />
+		</tx:attributes>
+	</tx:advice>
+
+	<aop:config>
+		<aop:pointcut id="pc" expression="execution(* *..service*..*(..))" /> <!--把事务控制在Service层 -->
+		<aop:advisor pointcut-ref="pc" advice-ref="txAdvice" />
+	</aop:config>
+
+	<!-- Services -->
+	<bean id="taskService" class="com.haitao55.spider.realtime.service.impl.TaskServiceImpl">
+		<property name="taskDAO" ref="taskDAO" />
+	</bean>
+	<bean id="itemService" class="com.haitao55.spider.realtime.service.impl.ItemServiceImpl">
+		<property name="itemDAO" ref="itemDAO" />
+	</bean>
+	<bean id="xmlParseService" class="com.haitao55.spider.crawler.service.impl.XmlParseServiceImpl" init-method="init" />
+
+	<bean id="monitorService" class="com.haitao55.spider.common.service.impl.MonitorServiceImpl">
+		<constructor-arg name="namespace" value="spider.haitao55"/>
+        <constructor-arg name="name" value="realtime"/>
+	</bean>
+	
+	<!--ali vps mongo DAOs -->
+<!-- 	<mongo:mongo id="alimongo" host="${mongo.host}" port="${mongo.port}" /> -->
+<!-- 	<mongo:db-factory id="mongoFactory" mongo-ref="alimongo" dbname="${mongo.dbname}" username="${mongo.user}" password="${mongo.passwd}" /> -->
+<!-- 	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate"> -->
+<!-- 		<constructor-arg name="mongoDbFactory" ref="mongoFactory" /> -->
+<!-- 	</bean> -->
+
+	<mongo:mongo-client id="mongoClient" credentials="${mongo.uri}" replica-set="${mongo.rs}"/>
+	 <mongo:db-factory id="mongoDbFactory" dbname="${mongo.dbname}" mongo-ref="mongoClient" />
+	 <mongo:template id="mongoTemplate" db-factory-ref="mongoDbFactory"/>
+	
+	<bean id="baseMongoDAO" class="com.haitao55.spider.common.dao.impl.mongo.BaseMongoDAO" abstract="true">
+		<property name="mongoTemplate" ref="mongoTemplate" />
+	</bean>
+	
+	<!-- google vps mongo  -->
+	<mongo:mongo id="googlemongo" host="${mongo.google.host}" port="${mongo.google.port}" />
+	<mongo:db-factory id="mongoGoogleFactory" mongo-ref="googlemongo" dbname="${mongo.google.dbname}" username="${mongo.google.user}" password="${mongo.google.passwd}" />
+	<bean id="mongoGoogleTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+		<constructor-arg name="mongoDbFactory" ref="mongoGoogleFactory" />
+	</bean>
+
+	<bean id="baseMongoGoogleDAO" class="com.haitao55.spider.common.dao.impl.mongo.BaseMongoDAO" abstract="true">
+		<property name="mongoTemplate" ref="mongoGoogleTemplate" />
+	</bean>
+	
+	<!-- 杭州商品库 -->
+	<bean id="itemDAO" class="com.haitao55.spider.common.dao.impl.mongo.ItemDAOImpl" parent="baseMongoDAO"/>
+	<bean id="currentItemDAOImpl" class="com.haitao55.spider.common.dao.impl.mongo.CurrentItemDAOImpl" parent="baseMongoDAO" />
+	
+	<!-- url 种子库 区分阿里云 和 google云 -->
+	<!-- aliyun url -->
+	<bean id="aliUrlDao" class="com.haitao55.spider.common.dao.impl.mongo.UrlDAOImpl" parent="baseMongoDAO"></bean>
+	<!-- google url -->
+	<bean id="googleUrlDao" class="com.haitao55.spider.common.dao.impl.mongo.UrlDAOImpl" parent="baseMongoGoogleDAO"></bean>
+	
+	<!-- google 图片库 -->
+	<!-- image DAO -->
+	<bean id="imageDAO" class="com.haitao55.spider.common.dao.impl.mongo.ImageDAOImpl" parent="baseMongoGoogleDAO" />
+	
+	<bean id="taskDAO" class="com.haitao55.spider.common.dao.impl.TaskDaoImpl" />
+	
+	<bean id="proxyDAO" class="com.haitao55.spider.common.dao.impl.ProxyDAOImpl" />
+	
+	<bean id="producer" class="com.haitao55.spider.common.kafka.SpiderKafkaProducerImpl">
+		<constructor-arg name="kafkaProps">
+			<props>
+					<prop key="bootstrap.servers">${kafka.bootstrap.servers}</prop>
+					<prop key="acks">${kafka.acks}</prop>
+					<prop key="retries">${kafka.retries}</prop>
+					<prop key="batch.size">${kafka.batch.size}</prop>
+					<prop key="linger.ms">${kafka.linger.ms}</prop>
+					<prop key="buffer.memory">${kafka.buffer.memory}</prop>
+					<prop key="key.serializer">${kafka.key.serializer}</prop>
+					<prop key="value.serializer">${kafka.value.serializer}</prop>
+				</props>
+		</constructor-arg>
+	</bean>
+	
+	<!-- upyun -->
+	<bean id="upyun" class="main.java.com.UpYun">
+		<constructor-arg index="0" value="${upyun.bucketName}"/>
+		<constructor-arg index="1" value="${upyun.userName}"/>
+		<constructor-arg index="2" value="${upyun.password}"/>
+	</bean>
+	
+	<!-- redis -->
+	<bean id="redisService" class="com.haitao55.spider.common.service.impl.RedisService">
+		<property name="shardedJedisPool" ref="shardedJedisPool"></property>
+	</bean>
+
+	
+	<bean id="outputDataDealService" class="com.haitao55.spider.realtime.service.impl.OutputDataDealServiceImpl" >
+		<property name="upyun" ref="upyun" />
+		<property name="upyunAddress" value="${upyun.address}" />
+	</bean>
+	
+	<bean id="realtimeCrawlerTimedTask" class="com.haitao55.spider.realtime.controller.task.RealtimeCrawlerTimedTask">
+		<property name="taskService" ref="taskService" />
+		<property name="xmlParseService" ref="xmlParseService" />
+		<property name="proxyDAO" ref="proxyDAO" />
+		<property name="redisService" ref="redisService" />
+		<property name="aliUrlDao" ref="aliUrlDao" />
+		<property name="googleUrlDao" ref="googleUrlDao" />
+	</bean>
+	
+	<!-- ========================= Schedule task config ========================= -->
+	<bean id="reloadTasksJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="realtimeCrawlerTimedTask"/>
+        <property name="targetMethod" value="reloadTasks"/>
+    </bean>
+    <bean id="reloadTasksTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="reloadTasksJob"/>
+        <property name="cronExpression">
+             <value>0/10 * * * * ?</value>
+        </property>
+    </bean>
+    
+    <!-- proxy -->
+    <bean id="reloadProxyJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="realtimeCrawlerTimedTask"/>
+        <property name="targetMethod" value="reloadProxy"/>
+    </bean>
+    <bean id="reloadProxyTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="reloadProxyJob"/>
+        <property name="cronExpression">
+             <value>0/10 * * * * ?</value>
+        </property>
+    </bean>
+    
+    <!-- inserturl -->
+    <bean id="insertUrlFromRedisToMongoJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="realtimeCrawlerTimedTask"/>
+        <property name="targetMethod" value="insertUrlFromRedisToMongo"/>
+    </bean>
+    <bean id="insertUrlFromRedisToMongoTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="insertUrlFromRedisToMongoJob"/>
+        <property name="cronExpression">
+        <!-- 0 5 0 * * ? -->
+             <value>0 */3 * * * ?</value>
+        </property>
+    </bean>
+    
+    <bean id="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers">
+            <list>
+                <ref bean="reloadTasksTrigger"/>
+                <ref bean="reloadProxyTrigger"/>
+                <ref bean="insertUrlFromRedisToMongoTrigger"/>
+            </list>
+        </property>
+    </bean>
+    <import resource="applicationContext-redis.xml"/>
+</beans>

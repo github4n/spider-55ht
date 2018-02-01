@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rules xmlns="http://www.55haitao.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+	<rule grade="0">
+		<selectallpages input="${doc}" css="div.header-nav.refresh-container > ul > li > div.header-dropdown > div.refresh-container > div.header-sub-nav > div.lists > div > ul > li > h5 > a" attr="abs:href" regex="&amp;pf_rd_r=.*" replacement="" cssTemplateUrl="div#resultWrap > div.sort.top > div.pagination > a:first-of-type" attrTemplateUrl="abs:href" cssTotalPages="div#resultWrap > div.sort.top > div.pagination > span.last > a" attrTotalPages="text" cssTotalItems="span.resultCount" itemsPerPage="100" attrTotalItems="text" replaceRegex="p=\d+" replaceFormat="p={}" startIndex="1" output="newurls" grade="1"/>
+	</rule>
+
+	<rule grade="1">
+		<selecturls input="${doc}"  css="div#searchResults > a" attr="abs:href" type="ITEM" output="newurls" grade="2"/>
+	</rule>
+
+	<rule grade="2">
+		<_6pm input="${html}" output="retbody" />
+		<output channel="kafka" fields="retbody" />
+	</rule>
+</rules>

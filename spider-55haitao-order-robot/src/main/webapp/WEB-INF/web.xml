@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee    
+  		http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+
+	<!-- 全局参数 -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>/WEB-INF/classes/applicationContext-order-robot-beans.xml</param-value>
+	</context-param>
+
+	<servlet>
+		<servlet-name>springmvc</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classpath:order-robot-springMVC.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>springmvc</servlet-name>
+		<url-pattern>*.action</url-pattern>
+	</servlet-mapping>
+	<!-- 字符编码过滤器，过滤所有的URL请求 -->
+	<filter>
+		<filter-name>CharFilter</filter-name>
+		<filter-class>com.haitao55.spider.order_robot.common.util.CharFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>CharFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<!-- 应用程序初始化和销毁时候的监听器类 -->
+	<listener>
+		<listener-class>com.haitao55.spider.order_robot.common.util.ApplicationInitializationListener</listener-class>
+	</listener>
+
+	<jsp-config>
+		<taglib>
+			<taglib-uri>http://java.sun.com/jstl/fmt</taglib-uri>
+			<taglib-location>/WEB-INF/tlds/fmt.tld</taglib-location>
+		</taglib>
+		<taglib>
+			<taglib-uri>http://java.sun.com/jsp/jstl/core</taglib-uri>
+			<taglib-location>/WEB-INF/tlds/c.tld</taglib-location>
+		</taglib>
+		<taglib>
+			<taglib-uri>http://java.sun.com/jsp/jstl/functions</taglib-uri>
+			<taglib-location>/WEB-INF/tlds/fn.tld</taglib-location>
+		</taglib>
+	</jsp-config>
+
+	<welcome-file-list>
+		<welcome-file>/jsp/index.jsp</welcome-file>
+	</welcome-file-list>
+
+	<login-config>
+		<auth-method>BASIC</auth-method>
+	</login-config>
+	<error-page>
+		<exception-type>loginError</exception-type>
+		<location>/jsp/index.jsp</location>
+	</error-page>
+</web-app>

@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:cache="http://www.springframework.org/schema/cache"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-3.2.xsd
+    http://www.springframework.org/schema/mvc
+    http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+    http://www.springframework.org/schema/aop
+    http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+    http://www.springframework.org/schema/tx 
+	http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+    http://www.springframework.org/schema/data/mongo
+    http://www.springframework.org/schema/data/mongo/spring-mongo-1.4.xsd
+    http://www.springframework.org/schema/cache
+    http://www.springframework.org/schema/cache/spring-cache-3.2.xsd
+    http://www.springframework.org/schema/util
+    http://www.springframework.org/schema/util/spring-util-3.2.xsd">
+    
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>file:config/config.properties</value>
+            </list>
+        </property>
+    </bean>
+    
+    <!-- services -->
+    <bean id="bootstrap" class="com.haitao55.spider.monitor_collector.Bootstrap" init-method="init" destroy-method="destroy" />
+        
+    <!-- scheduled job bean -->
+    <bean id="monitorCollectorTask" class="com.haitao55.spider.monitor_collector.task.MonitorCollectorTask" init-method="init" destroy-method="destroy" >
+    	<property name="monitorLogFile" value="${monitor.log.file}"/>
+    	<property name="monilorCollectorServerAddr" value="${monilor.collector.server.addr}" />
+    	<property name="monitorModule" value="${monitor.module}" />
+    	<property name="comeFrom" value="${monitor.come.from}"></property>
+    	
+    </bean>
+    
+    <!-- ========================= Schedule task config ========================= -->
+    <bean id="monitorCollectorTaskJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="monitorCollectorTask"/>
+        <property name="targetMethod" value="collectMonitorLog"/>
+    </bean>
+    <bean id="monitorCollectorTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="monitorCollectorTaskJob"/>
+        <property name="cronExpression">
+             <value>0 0/1 * * * ?</value>
+        </property>
+    </bean>
+    
+    <bean id="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean"> 
+        <property name="triggers"> 
+            <list>
+                <ref bean="monitorCollectorTaskTrigger"/>
+            </list> 
+        </property> 
+    </bean>
+</beans>

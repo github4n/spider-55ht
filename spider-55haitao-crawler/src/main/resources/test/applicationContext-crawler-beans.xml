@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+	<bean id="autoRefreshPropertyConfigurer"
+		class="com.haitao55.spider.crawler.config.AutoRefreshPropertyConfigurer">
+		<property name="locations">
+			<list>
+				<value>file:config/config.properties</value>
+			</list>
+		</property>
+		<property name="ignoreResourceNotFound" value="true" />
+		<property name="refreshInterval" value="5000" />
+	</bean>
+
+	<bean id="bootstrap" class="com.haitao55.spider.crawler.Bootstrap"
+		init-method="start" destroy-method="destroy">
+		<property name="workerCount" value="${crawler.property.worker.count}" />
+		<property name="worker" ref="worker" />
+		<property name="tasks">
+			<list>
+				<ref bean="heartbeatTask" />
+				<ref bean="taskReloadTask" />
+				<ref bean="proxyReloadTask" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="worker" class="com.haitao55.spider.crawler.tasks.Worker">
+		<property name="pipeline" ref="standardPipeline" />
+	</bean>
+
+	<bean id="standardPipeline"
+		class="com.haitao55.spider.crawler.core.pipeline.StandardPipeline">
+		<property name="valves">
+			<list>
+				<ref bean="applyValve" />
+				<ref bean="crawlerValve" />
+				<ref bean="deleterValve" />
+				<ref bean="outputValve" />
+				<ref bean="echoValve" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="applyValve"
+		class="com.haitao55.spider.crawler.core.pipeline.valve.ApplyValve">
+		<property name="sleepTimeNoneUrls" value="${crawler.property.sleepTimeNoneUrls}" />
+		<property name="documentQueueService" ref="documentQueueService" />
+	</bean>
+
+	<bean id="crawlerValve"
+		class="com.haitao55.spider.crawler.core.pipeline.valve.CrawlerValve">
+		<property name="monitorService" ref="monitorService" />
+	</bean>
+
+	<bean id="deleterValve"
+		class="com.haitao55.spider.crawler.core.pipeline.valve.DeleterValve">
+		<property name="deleteThresholdOnCrawledFailedTimes"
+			value="${crawler.property.deleteThresholdOnCrawledFailedTimes}" />
+	</bean>
+
+	<bean id="outputValve"
+		class="com.haitao55.spider.crawler.core.pipeline.valve.OutputValve">
+		<property name="monitorService" ref="monitorService" />
+		<property name="outputServiceKafka" ref="outputServiceKafka" />
+		<property name="outputServiceController" ref="outputServiceController" />
+		<property name="outputServiceFile" ref="outputServiceFile" />
+		<property name="outputServiceMail" ref="outputServiceMail" />
+	</bean>
+
+	<bean id="echoValve"
+		class="com.haitao55.spider.crawler.core.pipeline.valve.EchoValve">
+		<property name="documentService" ref="documentService" />
+	</bean>
+	
+	<bean id="heartbeatTask" class="com.haitao55.spider.crawler.tasks.HeartbeatTask">
+		<property name="heartbeatInterval" value="${crawler.property.heartbeatInterval}" />
+		<property name="thriftConnectionProvider" ref="thriftConnectionProvider" />
+	</bean>
+
+	<bean id="taskReloadTask" class="com.haitao55.spider.crawler.tasks.TaskReloadTask">
+		<property name="taskReloadFetchInterval" value="${crawler.property.taskReloadFetchInterval}" />
+		<property name="thriftConnectionProvider" ref="thriftConnectionProvider" />
+		<property name="xmlParseService" ref="xmlParseService" />
+	</bean>
+
+	<bean id="proxyReloadTask" class="com.haitao55.spider.crawler.tasks.ProxyReloadTask">
+		<property name="proxyFetchInterval" value="${crawler.property.proxyFetchInterval}" />
+		<property name="thriftConnectionProvider" ref="thriftConnectionProvider" />
+	</bean>
+
+	<bean id="thriftConnectionProvider"
+		class="com.haitao55.spider.crawler.thrift.pool.ThriftConnectionProviderImpl">
+		<property name="serviceIP" value="${crawler.property.thrift.serviceIP}" />
+		<property name="servicePort" value="${crawler.property.thrift.servicePort}" />
+		<property name="connectTimeOut" value="${crawler.property.thrift.connectTimeOut}" />
+		<property name="initialBufferCapacity"
+			value="${crawler.property.thrift.initialBufferCapacity}" />
+		<property name="maxLength" value="${crawler.property.thrift.maxLength}" />
+	</bean>
+
+	<bean id="xmlParseService"
+		class="com.haitao55.spider.crawler.service.impl.XmlParseServiceImpl"
+		init-method="init" />
+
+	<bean id="documentQueueService"
+		class="com.haitao55.spider.crawler.service.impl.DocumentQueueServiceImpl"
+		init-method="init">
+		<property name="documentInputCount" value="${crawler.property.documentInputCount}" />
+		<property name="documentOutputCount" value="${crawler.property.documentOutputCount}" />
+		<property name="documentService" ref="documentService" />
+		<property name="tempoInterval" value="${crawler.property.tempoInterval}" />
+	</bean>
+
+	<bean id="documentService"
+		class="com.haitao55.spider.crawler.service.impl.DocumentServiceImpl">
+		<property name="thriftConnectionProvider" ref="thriftConnectionProvider" />
+		<property name="xmlParseService" ref="xmlParseService" />
+	</bean>
+
+	<bean id="monitorService"
+		class="com.haitao55.spider.common.service.impl.MonitorServiceImpl">
+		<constructor-arg index="0">
+			<value>spider.haitao55</value>
+		</constructor-arg>
+		<constructor-arg index="1">
+			<value>crawler</value>
+		</constructor-arg>
+	</bean>
+	<bean id="upyun" class="main.java.com.UpYun">
+		<constructor-arg index="0" value="${upyun.bucketName}"/>
+		<constructor-arg index="1" value="${upyun.userName}"/>
+		<constructor-arg index="2" value="${upyun.password}"/>
+	</bean>
+
+	<bean id="outputServiceFile" class="com.haitao55.spider.crawler.service.impl.OutputServiceFile">
+		<property name="monitorService" ref="monitorService" />
+	</bean>
+	<bean id="outputServiceMail" class="com.haitao55.spider.crawler.service.impl.OutputServiceMail">
+		<property name="redisService" ref="redisService" />
+	</bean>
+	<bean id="outputServiceKafka" class="com.haitao55.spider.crawler.service.impl.OutputServiceKafka" >
+		<property name="producer" ref="producer"></property>
+		<property name="topic" value="${kafka.haitao.topic}"></property>
+		<property name="key" value="${kafka.haitao.key}"></property>
+		<property name="upyun" ref="upyun" />
+		<property name="upyunAddress" value="${upyun.address}" />
+	</bean> 
+	<bean id="outputServiceController" class="com.haitao55.spider.crawler.service.impl.OutputServiceController">
+		<property name="thriftConnectionProvider" ref="thriftConnectionProvider" />
+	</bean>
+	
+	<bean id="producer" class="com.haitao55.spider.common.kafka.SpiderKafkaProducerImpl">
+	<constructor-arg name="kafkaProps">
+		<props>
+				<prop key="bootstrap.servers">${kafka.bootstrap.servers}</prop>
+				<prop key="acks">${kafka.acks}</prop>
+				<prop key="retries">${kafka.retries}</prop>
+				<prop key="batch.size">${kafka.batch.size}</prop>
+				<prop key="linger.ms">${kafka.linger.ms}</prop>
+				<prop key="buffer.memory">${kafka.buffer.memory}</prop>
+				<prop key="key.serializer">${kafka.key.serializer}</prop>
+				<prop key="value.serializer">${kafka.value.serializer}</prop>
+			</props>
+	</constructor-arg>
+	</bean>
+</beans>

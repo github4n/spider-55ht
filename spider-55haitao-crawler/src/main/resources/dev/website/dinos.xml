@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rules xmlns="http://www.55haitao.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+
+	<rule grade="0">
+		<selecturls input="${doc}" css="div#subCategory a"  attr="href" type="LINK" output="newurls" grade="1"/>
+　　　　　　　　　<concaturls prefix="http://www.dinos.co.jp" contains="http" />
+　　	</rule>
+
+	<rule grade="1">
+		<selectpages input="${doc}" cssTemplateUrl="div.page ul li:last-child a" attrTemplateUrl="href" cssTotalPages="div.page ul li:nth-last-child(2)" attrTotalPages="text" replaceRegex="\d+a" replaceFormat="{}a" startIndex="1" type="LINK" grade="2" output="newurls" />
+		<selecturls input="${doc}" css="div#listPreview ul li form div>a" attr="href" type="ITEM" grade="3" output="newurls" />
+　　　　　　　　　<concaturls prefix="http://www.dinos.co.jp"  contains="http" />
+	</rule>
+
+	<rule grade="2">
+		<selecturls input="${doc}" css="div#listPreview ul li form div>a" attr="href"  type="ITEM" grade="3" output="newurls" />
+　　　　　　　　　<concaturls prefix="http://www.dinos.co.jp"  contains="http" />
+	</rule>
+
+        <rule regex=".*www.dinos.co.jp.*" grade="3">
+
+                <dinos input="${doc}" output="retbody" />		
+		
+		<output channel="kafka" fields="retbody" />
+
+	</rule>
+
+</rules>

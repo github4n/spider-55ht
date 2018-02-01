@@ -1,0 +1,261 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.haitao55.spider</groupId>
+    <artifactId>spider-55haitao</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+
+  <groupId>com.haitao55.spider</groupId>
+  <artifactId>spider-55haitao-order-robot</artifactId>
+  <packaging>war</packaging>
+  <name>spider-55haitao-order-robot Maven Webapp</name>
+  <url>http://maven.apache.org</url>
+  
+  <properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.test.skip>true</maven.test.skip>
+		<downloadSources>true</downloadSources>
+		<java_source_version>1.8</java_source_version>
+		<java_target_version>1.8</java_target_version>
+		<file_encoding>UTF-8</file_encoding>
+		<springframework.version>4.3.2.RELEASE</springframework.version>
+	</properties>
+
+  <dependencies>
+        <dependency>
+	      <groupId>com.haitao55.spider</groupId>
+	      <artifactId>spider-55haitao-crawler</artifactId>
+	      <version>1.0-SNAPSHOT</version>
+	    </dependency>
+		 <dependency>
+		    <groupId>com.alibaba</groupId>
+		    <artifactId>druid</artifactId>
+		    <version>1.0.26</version>
+		</dependency>
+		<dependency>
+		  <groupId>jstl</groupId>
+		  <artifactId>jstl</artifactId>
+		  <version>1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>1.3</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.3.1</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>1.1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.freemarker</groupId>
+			<artifactId>freemarker</artifactId>
+			<version>2.3.19</version>
+		</dependency>
+		<dependency>
+			<groupId>org.javassist</groupId>
+			<artifactId>javassist</artifactId>
+			<version>3.18.1-GA</version>
+		</dependency>
+		<dependency>
+			<groupId>ognl</groupId>
+			<artifactId>ognl</artifactId>
+			<version>3.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.struts</groupId>
+			<artifactId>struts2-core</artifactId>
+			<version>2.2.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.struts</groupId>
+			<artifactId>struts2-spring-plugin</artifactId>
+			<version>2.3.16.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.struts.xwork</groupId>
+			<artifactId>xwork-core</artifactId>
+			<version>2.2.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>${springframework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+			<version>${springframework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aop</artifactId>
+			<version>${springframework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${springframework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+			<version>${springframework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<version>${springframework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>${springframework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			 <version>1.1.41</version>
+		</dependency>
+	</dependencies>
+	
+	<build>
+		<finalName>55haitao-order-robot</finalName>
+		<directory>target</directory>
+		<sourceDirectory>src/main/java</sourceDirectory>
+		<outputDirectory>src/main/webapp/WEB-INF/classes</outputDirectory>
+		<resources>
+		    <resource>
+                	<directory>src/main/resources/${package.environment}</directory>
+		        <filtering>true</filtering>
+	            </resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.0.2</version>
+				<configuration>
+					<warSourceDirectory>src/main/webapp</warSourceDirectory>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	
+	<profiles>
+              <profile>
+                  <id>dev</id>
+                  <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+                      <properties>
+                              <package.environment>dev</package.environment>
+                              
+                              <!-- mongo -->
+                              <mongo.host>172.16.7.161</mongo.host>
+                              <mongo.port>27017</mongo.port>
+                              <mongo.dbname>spider_55haitao</mongo.dbname>
+                              <mongo.user></mongo.user>
+                              <mongo.passwd></mongo.passwd>
+                              
+                              <!-- mysql -->
+                              <mysql.host>172.16.7.161</mysql.host>
+                              <mysql.port>3306</mysql.port>
+                              <mysql.username>root</mysql.username>
+                              <mysql.password>liushizhen</mysql.password>
+                              <mysql.dbname>spider_55haitao</mysql.dbname>
+                              <mysql.driverClassName>com.mysql.jdbc.Driver</mysql.driverClassName>
+                              <mysql.initialSize>3</mysql.initialSize>
+                              <mysql.minIdle>10</mysql.minIdle>
+                              <mysql.maxIdle>15</mysql.maxIdle>
+                              <mysql.maxActive>20</mysql.maxActive>
+                              <mysql.maxWait>60000</mysql.maxWait>
+                              <mysql.timeBetweenEvictionRunsMillis>60000</mysql.timeBetweenEvictionRunsMillis>
+                              <mysql.minEvictableIdleTimeMillis>300000</mysql.minEvictableIdleTimeMillis>
+                              <mysql.validationQuery>SELECT 'x'</mysql.validationQuery>
+                              <mysql.testWhileIdle>true</mysql.testWhileIdle>
+                              <mysql.testOnBorrow>false</mysql.testOnBorrow>
+                              <mysql.testOnReturn>false</mysql.testOnReturn>
+                              
+                              <!-- region -->
+                              <region>region</region>
+                              
+                              <!-- kafka -->
+                              <kafka.haitao.topic>spider_crawler_55haitao</kafka.haitao.topic>
+                              <kafka.haitao.key>www.6pm.com</kafka.haitao.key>
+                              <kafka.bootstrap.servers>172.16.7.161:9092</kafka.bootstrap.servers>
+                              <kafka.acks>all</kafka.acks>
+                              <kafka.retries>3</kafka.retries>
+                              <kafka.batch.size>16384</kafka.batch.size>
+                              <kafka.linger.ms>1</kafka.linger.ms>
+                              <kafka.buffer.memory>33554432</kafka.buffer.memory>
+                              <kafka.key.serializer>org.apache.kafka.common.serialization.StringSerializer</kafka.key.serializer>
+                              <kafka.value.serializer>org.apache.kafka.common.serialization.StringSerializer</kafka.value.serializer>
+                              
+                              <redis>redis://:spider55haitao@114.55.61.171:12002</redis>
+                      </properties>
+              </profile>
+              <profile>
+                  <id>product</id>
+                      <properties>
+                              <package.environment>product</package.environment>
+                              
+                              <!-- mongo -->
+                              <mongo.host>10.26.97.231</mongo.host>
+                              <mongo.port>9352</mongo.port>
+                              <mongo.dbname>spider_55haitao</mongo.dbname>
+                              <mongo.user></mongo.user>
+                              <mongo.passwd></mongo.passwd>
+                              
+                              <!-- mysql -->
+                              <mysql.host>10.26.197.128</mysql.host>
+                              <mysql.port>3306</mysql.port>
+                              <mysql.username>spider</mysql.username>
+                              <mysql.password>spider_55haitao</mysql.password>
+                              <mysql.dbname>spider_55haitao</mysql.dbname>
+                              <mysql.driverClassName>com.mysql.jdbc.Driver</mysql.driverClassName>
+                              <mysql.initialSize>3</mysql.initialSize>
+                              <mysql.minIdle>10</mysql.minIdle>
+                              <mysql.maxIdle>15</mysql.maxIdle>
+                              <mysql.maxActive>20</mysql.maxActive>
+                              <mysql.maxWait>60000</mysql.maxWait>
+                              <mysql.timeBetweenEvictionRunsMillis>60000</mysql.timeBetweenEvictionRunsMillis>
+                              <mysql.minEvictableIdleTimeMillis>300000</mysql.minEvictableIdleTimeMillis>
+                              <mysql.validationQuery>SELECT 'x'</mysql.validationQuery>
+                              <mysql.testWhileIdle>true</mysql.testWhileIdle>
+                              <mysql.testOnBorrow>false</mysql.testOnBorrow>
+                              <mysql.testOnReturn>false</mysql.testOnReturn>
+                              
+                              <!-- region -->
+                              <region>region</region>
+                              
+                              <!-- kafka -->
+                              <kafka.haitao.topic>spider_crawler_55haitao</kafka.haitao.topic>
+                              <kafka.haitao.key>www.6pm.com</kafka.haitao.key>
+                              <kafka.bootstrap.servers>10.24.32.17:9092,10.45.22.63:9093</kafka.bootstrap.servers>
+                              <kafka.acks>all</kafka.acks>
+                              <kafka.retries>3</kafka.retries>
+                              <kafka.batch.size>16384</kafka.batch.size>
+                              <kafka.linger.ms>1</kafka.linger.ms>
+                              <kafka.buffer.memory>33554432</kafka.buffer.memory>
+                              <kafka.key.serializer>org.apache.kafka.common.serialization.StringSerializer</kafka.key.serializer>
+                              <kafka.value.serializer>org.apache.kafka.common.serialization.StringSerializer</kafka.value.serializer>
+                              
+                              <redis>redis://:spider55haitao@10.24.32.17:12002</redis>
+                      </properties>
+              </profile>
+      </profiles>
+</project>

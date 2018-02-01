@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rules xmlns="http://www.55haitao.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+
+	<rule grade="0">
+		<selecturls input="${doc}" css="ul#main_nav li div.subnav_down a"  attr="href" type="LINK" output="newurls" grade="1"/>
+　　　　　　　　　<concaturls prefix="http://www.lordandtaylor.com" contains="http" />
+　　	</rule>
+
+	<rule grade="1">
+		<selectlordandtaylorpages input="${doc}" itemsPerPage="100" totals="100" cssTotalItems="div#list_page1 span" attrTotalItems="text" startIndex="2" type="LINK" grade="2" output="newurls" />
+		<selectlordandtaylorurls input="${doc}" css="ul#totproductsList li>script:first-child" type="ITEM" grade="3" output="newurls" />
+　　　　　　　　　
+	</rule>
+
+	<rule grade="2">
+		<selectlordandtaylorurls input="${doc}" css="ul#totproductsList li>script:first-child"  type="ITEM" grade="3" output="newurls" />
+　　　　　　　　　
+	</rule>
+
+    <rule regex=".*www.lordandtaylor.com.*" grade="3">
+
+        <lordandtaylor input="${html}" output="retbody" />		
+		
+		<output channel="kafka" fields="retbody" />
+
+	</rule>
+
+</rules>

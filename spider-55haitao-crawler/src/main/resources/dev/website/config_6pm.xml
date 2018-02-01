@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rules xmlns="http://www.55haitao.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+	<rule regex="^http://www.6pm.com$">
+		<selecturls input="${doc}" css="div.small.column > div.catNav > div.catSection > a" attr="abs:href" regex="&amp;pf_rd_r=.*" replacement="" type="LINK" output="newurls" />
+	</rule>
+
+	<rule regex="^(?!http://www.6pm.com.*-page).*recentSalesStyle/desc(|/)$">
+		<selecturls input="${doc}"  css="div#searchResults > a" attr="abs:href" type="ITEM" output="newurls" />
+		<selectpages input="${doc}" cssTemplateUrl="div#resultWrap > div.sort.top > div.pagination > a:first-of-type" attrTemplateUrl="abs:href" cssTotalPages="div#resultWrap > div.sort.top > div.pagination > span.last > a" attrTotalPages="text" 
+		replaceRegex="p=\d+" replaceFormat="p={}" startIndex="1" output="newurls" />
+	</rule>
+
+	<rule regex="^http://www.6pm.com/.*-page\d+/.*recentSalesStyle/desc/$">
+		<selecturls input="${doc}"  css="div#searchResults > a" attr="abs:href" type="ITEM" output="newurls" />
+	</rule>
+
+	<rule regex="^http://www.6pm.com/[A-Za-z0-9]+-[A-Za-z0-9]+-[A-Za-z0-9]+-[A-Za-z0-9]+-[A-Za-z0-9]+-.*$">
+		<_6pm input="${html}" output="retbody" />
+		<output channel="kafka" fields="retbody" />
+	</rule>
+</rules>

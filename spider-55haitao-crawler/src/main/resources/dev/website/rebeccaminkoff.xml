@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rules xmlns="http://www.55haitao.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<rule grade="0">
+		<selecturls input="${doc}" css="div.mm-text-links>ul>li>a" attr="abs:href" type="LINK" regex="$" replacement="?limit=all" output="newurls" grade="1"/>
+	</rule>
+	<rule grade="1">
+		<selecturls input="${doc}" css="div.product-info h2.product-name>a" attr="abs:href" type="ITEM" output="newurls" grade="2"/>
+	</rule>
+	<rule grade="2" regex=".*www.rebeccaminkoff.com.*">
+		<rebeccaminkoff input="${html}" output="retbody"/>		
+		<output channel="kafka" fields="retbody" />
+	</rule>
+</rules>

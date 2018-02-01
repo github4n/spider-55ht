@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rules xmlns="http://www.55haitao.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<rule grade="0">
+		<selectallpages input="${doc}" css="li.nav-sub-categories>ul>li:not(.first) > a" attr="abs:href" cssTemplateUrl="div.pages li:nth-child(5)>a" attrTemplateUrl="abs:href" cssTotalPages="div.pages>ol>li:nth-last-child(3)" replaceRegex="p=\d+" replaceFormat="p={}" startIndex="2" output="newurls" grade="1"/>
+	</rule>
+	<rule grade="1">
+		<selecturls input="${doc}" css="div.product-wrapper div.product-name>a" attr="abs:href" type="ITEM" output="newurls" grade="2"/>
+	</rule>
+	<rule grade="2" regex=".*www.escentual.com.*">
+		<escentual input="${html}" output="retbody"/>		
+		<output channel="kafka" fields="retbody" />
+	</rule>
+</rules>

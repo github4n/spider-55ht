@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.haitao55.spider.common.dao.impl.mysql.ProxyMapper">
+	<sql id="allColumns">
+		id, region_id as regionId,region_name as regionName,ip,port
+	</sql>
+
+	<select id="getAllProxies" resultType="com.haitao55.spider.common.dos.ProxyDO">
+		select
+		<include refid="allColumns" />
+		from proxy
+	</select>
+	
+	<insert id="insertProxy" parameterType="com.haitao55.spider.common.dos.ProxyDO">
+		insert into proxy(id,region_id,region_name,ip,port) 
+		VALUES(
+		NULL,
+		#{regionId,jdbcType=VARCHAR},
+		#{regionName,jdbcType=VARCHAR},
+		#{ip,jdbcType=VARCHAR},
+		#{port,jdbcType=INTEGER}
+		)
+		;
+	</insert>
+	
+	<select id="selectProxy" parameterType="com.haitao55.spider.common.dos.ProxyDO" resultType="com.haitao55.spider.common.dos.ProxyDO">
+		select <include refid="allColumns" />
+	    from  proxy
+	    where 1=1
+	    <if test="id != null and id != '' ">
+	     and id=#{id,jdbcType=INTEGER}
+	    </if> 
+	    <if test="regionId != null and regionId != '' ">
+	     and region_id like '%#{regionId,jdbcType=VARCHAR}%' 
+	    </if> 
+	    <if test="regionName != null and regionName != '' ">
+	     and region_name like '%#{regionName,jdbcType=VARCHAR}%' 
+	    </if> 
+	    <if test="ip != null and ip != '' ">
+	     and ip like '%#{ip,jdbcType=VARCHAR}%' 
+	    </if> 
+	    <if test="port != null and port != '' ">
+	     and port=#{port,jdbcType=INTEGER}
+	    </if> 
+	</select>
+	
+	<select id="queryDistinctRegions" resultType="com.haitao55.spider.common.dos.ProxyDO">
+		SELECT region_id regionId,any_value(region_name) regionName  FROM proxy GROUP BY region_id ORDER BY region_id;
+	</select>
+	<select id="selectByRegionId" resultType="com.haitao55.spider.common.dos.ProxyDO" parameterType="String">
+		select <include refid="allColumns" />
+	    from  proxy
+	    where region_id=#{regionId}
+	</select>
+</mapper>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rules xmlns="http://www.55haitao.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<rule grade="0">
+		<c21storesselectlinkurls input="${doc}"  css="div#nav>ul>li" baseuri="https://www.c21stores.com" attr="data-primary-nav-child-menu" cssLink="div#main ul li a" attrLink="abs:href" type="LINK" output="newurls" grade="1"/>
+	</rule>	
+
+	<rule grade="1">
+		<selecturls input="${doc}"  css="div.pagination-results ul li div p a:has(img)"  attr="abs:href" regex="&amp;via=.*" replacement="" type="ITEM"  output="newurls" grade="3"/>
+		<selectpages input="${doc}" cssTemplateUrl="ul.pagination li.pagination__node.pagination__node--next a" attrTemplateUrl="abs:href" cssTotalPages="ul.pagination li.pagination__node.pagination__node--info span:nth-last-child(1)" attrTotalPages="text" replaceRegex="page=\d+" replaceFormat="page={}"  startIndex="1" output="newurls" grade="2"/>
+	</rule>
+        <rule grade="2">
+                <selecturls input="${doc}"  css="div.pagination-results ul li div p a:has(img)"  attr="abs:href" regex="&amp;via=.*" replacement="" type="ITEM"  output="newurls" grade="3"/>
+        </rule>
+
+        <rule regex=".*www.c21stores.com.*" grade="3">
+                <c21stores input="${doc}" output="retbody" />
+		<output channel="file" fields="retbody" />
+        </rule>
+
+</rules>

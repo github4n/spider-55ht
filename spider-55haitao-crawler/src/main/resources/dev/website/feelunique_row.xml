@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rules xmlns="http://www.55haitao.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+
+	<rule grade="0">
+		<selecturls input="${doc}" css="div.nav-inner  ul ol li a"  attr="href" type="LINK" output="newurls" grade="1"/>
+　　　　　　　　　<concaturls prefix="http://row.feelunique.com" contains="http" />
+　　	</rule>	
+
+	<rule grade="1">
+		<selectpageswithstartnumber input="${doc}" cssTemplateUrl="div.pages ul li:nth-child(2) a" attrTemplateUrl="href" cssTotalPages="div.pages ul li:nth-last-of-type(3) a,div.pages ul li:nth-last-of-type(2) a" attrTotalPages="text" replaceRegex="fh_start_index=\d+" replaceFormat="fh_start_index={}" startIndex="1" type="LINK" grade="2" output="newurls" />
+		<selecturls input="${doc}" css="div.Productlist div a:has(img)" attr="href" type="ITEM" grade="3" output="newurls" />
+　　　　　　　　　<concaturls prefix="http://row.feelunique.com"  contains="http" />
+	</rule>
+
+	<rule grade="2">
+		<selecturls input="${doc}" css="div.Productlist div a:has(img)" attr="href"  type="ITEM" grade="3" output="newurls" />
+　　　　　　　　　<concaturls prefix="http://row.feelunique.com"  contains="http" />
+	</rule>
+　　　　　
+　　　　　<rule regex=".*row.feelunique.com.*" grade="3">
+
+		<md5 input="${url}" output="DOCID" />
+
+		<constant key="Site.host" value="row.feelunique.com" />
+
+		<concatbykey input="${url}" output="ProdUrl.url" />
+
+		<time unit="milliseconds" output="ProdUrl.discovery_time" />
+
+		<md5 input="${url}" output="ProdUrl.url_no" />
+
+		<select input="${doc}" css="div.item h1" output="Title.en" />
+
+
+		<select input="${doc}" attr="concat_text" concatChar="," css="div#breadcrumb > ul li:not(:first-child)" output="BreadCrumbTemp" />
+ 
+	        <select input="${doc}" attr="concat_text" concatChar="," css="div#breadcrumb > ul li:not(:first-child)" output="CategoryTemp" />
+
+                
+
+                <array input="CategoryTemp" splitChar="," output="Category" />
+
+	　　　　   　<gender input="Title.en" output="s_gender"/>
+　　　　　　　　　　
+　　　　　　　　　      　<gender input="BreadCrumb" output="s_gender"/>
+	 	
+　　　　　　　　　      　<properties input="${doc}" input2="s_gender" output="Properties" />
+
+                <featurelist input="${doc}" css="div#product-description-tab div.tab-content"  output="FeatureList" />
+		
+		<description input="${doc}" css="div#product-description-tab div.tab-content"   output="Description.en" />
+	
+		
+		<rowfeelunique input="${doc}" output="retbody" />
+
+　　　　　　　　　<concat input="BreadCrumbTemp" suffix="," output="BreadCrumbTemp" />
+
+                <concatbykey input="BreadCrumbTemp" suffix="Brand.en" output="BreadCrumbTemp" />
+
+	        <array input="BreadCrumbTemp" splitChar="," output="BreadCrumb" />
+
+		<rowfeelunique input="${doc}" output="retbody" />
+
+		<retbody output="retbody"/>
+		
+		<output channel="kafka" fields="retbody" />
+
+	</rule>
+</rules>

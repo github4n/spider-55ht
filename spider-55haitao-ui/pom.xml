@@ -1,0 +1,519 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.haitao55.spider</groupId>
+    <artifactId>spider-55haitao</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+
+  <groupId>com.haitao55.spider</groupId>
+  <artifactId>spider-55haitao-ui</artifactId>
+  <packaging>war</packaging>
+  <name>spider-55haitao-ui Maven Webapp</name>
+  <url>http://maven.apache.org</url>
+  
+  <properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.test.skip>true</maven.test.skip>
+		<downloadSources>true</downloadSources>
+		<java_source_version>1.8</java_source_version>
+		<java_target_version>1.8</java_target_version>
+		<file_encoding>UTF-8</file_encoding>
+		<springframework.version>4.3.2.RELEASE</springframework.version>
+	</properties>
+
+  <dependencies>
+        <dependency>
+	      <groupId>com.haitao55.spider</groupId>
+	      <artifactId>spider-55haitao-common</artifactId>
+	      <version>1.0-SNAPSHOT</version>
+<!-- 	      <exclusions> -->
+<!-- 	        <exclusion> -->
+<!-- 	          <groupId>xml-apis</groupId> -->
+<!-- 	          <artifactId>xml-apis</artifactId> -->
+<!-- 	        </exclusion> -->
+<!-- 	      </exclusions> -->
+	    </dependency>
+		<!-- 
+		<dependency>
+		  <groupId>com.b5m.spider</groupId>
+		  <artifactId>spider-dsc</artifactId>
+		  <version>${parent.version}</version>
+		  <exclusions>
+            <exclusion>
+              <groupId>tomcat</groupId>
+              <artifactId>jasper-compiler</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>tomcat</groupId>
+              <artifactId>jasper-runtime</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>org.mortbay.jetty</groupId>
+              <artifactId>jsp-api-2.1</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>org.mortbay.jetty</groupId>
+              <artifactId>jsp-2.1</artifactId>
+            </exclusion>
+            <exclusion>
+            	<groupId>postgresql</groupId>
+				<artifactId>postgresql</artifactId>
+            </exclusion>
+            <exclusion>
+            	<groupId>com.b5m.spider</groupId>
+				<artifactId>spider-category</artifactId>
+            </exclusion>
+            <exclusion>
+            	<groupId>org.slf4j</groupId>
+            	<artifactId>slf4j-log4j12</artifactId>
+            </exclusion>
+            <exclusion>
+            	<groupId>commons-configuration</groupId>
+				<artifactId>commons-configuration</artifactId>
+            </exclusion>
+            <exclusion>
+            	<groupId>commons-lang</groupId>
+				<artifactId>commons-lang</artifactId>
+            </exclusion>
+            <exclusion>
+            	<groupId>commons-logging</groupId>
+				<artifactId>commons-logging</artifactId>
+            </exclusion>
+            <exclusion>
+            	<groupId>log4j</groupId>
+				<artifactId>log4j</artifactId>
+            </exclusion>
+            <exclusion>
+            	<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-api</artifactId>
+            </exclusion>
+            <exclusion>
+            	<groupId>com.b5m.lib</groupId>
+				<artifactId>spider-filter</artifactId>
+            </exclusion>
+            <exclusion>
+            	<groupId>org.hbase</groupId>
+				<artifactId>asynchbase</artifactId>
+            </exclusion>
+            <exclusion>
+            	<groupId>org.apache.hbase</groupId>
+				<artifactId>hbase-common</artifactId>
+            </exclusion>
+            <exclusion>
+            	<groupId>org.apache.hbase</groupId>
+				<artifactId>hbase-client</artifactId>
+            </exclusion>
+            <exclusion>
+            	<groupId>org.apache.hadoop</groupId>
+				<artifactId>hadoop-core</artifactId>
+            </exclusion>
+     	  </exclusions>
+		</dependency>
+		 -->
+		<dependency>
+		  <groupId>jstl</groupId>
+		  <artifactId>jstl</artifactId>
+		  <version>1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>1.3</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.3.1</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>1.1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.freemarker</groupId>
+			<artifactId>freemarker</artifactId>
+			<version>2.3.19</version>
+		</dependency>
+		<dependency>
+			<groupId>org.javassist</groupId>
+			<artifactId>javassist</artifactId>
+			<version>3.18.1-GA</version>
+		</dependency>
+		<dependency>
+			<groupId>ognl</groupId>
+			<artifactId>ognl</artifactId>
+			<version>3.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.struts</groupId>
+			<artifactId>struts2-core</artifactId>
+			<version>2.2.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.struts</groupId>
+			<artifactId>struts2-spring-plugin</artifactId>
+			<version>2.3.16.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.struts.xwork</groupId>
+			<artifactId>xwork-core</artifactId>
+			<version>2.2.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>${springframework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+			<version>${springframework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aop</artifactId>
+			<version>${springframework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${springframework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<version>${springframework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>${springframework.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-webmvc</artifactId>
+		    <version>${springframework.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			 <version>1.1.41</version>
+		</dependency>
+		<dependency>
+			<groupId>com.haitao55.spider</groupId>
+			<artifactId>spider-55haitao-crawler</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.influxdb</groupId>
+			<artifactId>influxdb-java</artifactId>
+			<version>2.2</version>
+		</dependency>
+  </dependencies>
+	
+	
+	<build>
+		<finalName>spider-55haitao-ui</finalName>
+		<directory>target</directory>
+		<sourceDirectory>src/main/java</sourceDirectory>
+		<outputDirectory>src/main/webapp/WEB-INF/classes</outputDirectory>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.0.2</version>
+				<configuration>
+					<!-- http://maven.apache.org/plugins/maven-war-plugin/ -->
+					<warSourceDirectory>src/main/webapp</warSourceDirectory>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	 <profiles>
+	 		  <profile>
+                  <id>dev</id>
+                      <properties>
+                              <package.environment>dev</package.environment>
+                              
+                              <!-- mongo -->
+                              <mongo.host>127.0.0.1</mongo.host>
+                              <mongo.port>12345</mongo.port>
+                              <mongo.dbname>spider_55haitao</mongo.dbname>
+                              <mongo.user></mongo.user>
+                              <mongo.passwd></mongo.passwd>
+                              
+                              <!-- google vps mongo -->
+                              <mongo.google.host>127.0.0.1</mongo.google.host>
+                              <mongo.google.port>12345</mongo.google.port>
+                              <mongo.google.dbname>spider_55haitao</mongo.google.dbname>
+                              <mongo.google.user></mongo.google.user>
+                              <mongo.google.passwd></mongo.google.passwd>
+                              
+                              <!-- mysql -->
+                              <mysql.host>127.0.0.1</mysql.host>
+                              <mysql.port>3306</mysql.port>
+                              <mysql.username>zhaoxl</mysql.username>
+                              <mysql.password>zhaoxl</mysql.password>
+                              <mysql.dbname>spider_55haitao</mysql.dbname>
+                              <mysql.driverClassName>com.mysql.jdbc.Driver</mysql.driverClassName>
+                              <mysql.initialSize>3</mysql.initialSize>
+                              <mysql.minIdle>10</mysql.minIdle>
+                              <mysql.maxIdle>15</mysql.maxIdle>
+                              <mysql.maxActive>20</mysql.maxActive>
+                              <mysql.maxWait>60000</mysql.maxWait>
+                              <mysql.timeBetweenEvictionRunsMillis>60000</mysql.timeBetweenEvictionRunsMillis>
+                              <mysql.minEvictableIdleTimeMillis>300000</mysql.minEvictableIdleTimeMillis>
+                              <mysql.validationQuery>SELECT 'x'</mysql.validationQuery>
+                              <mysql.testWhileIdle>true</mysql.testWhileIdle>
+                              <mysql.testOnBorrow>false</mysql.testOnBorrow>
+                              <mysql.testOnReturn>false</mysql.testOnReturn>
+                              
+                              <realtime.address>http://127.0.0.1:8080/spider-55haitao-realtime/realtime-crawler/pricing.action</realtime.address>
+                              
+                              <!-- region -->
+                              <region>region</region>
+                              
+                              <redis>redis://:spider55haitao@127.0.0.1:6379</redis>
+                              
+                              <!-- influxdb -->
+                              <influxdb.url>http://127.0.0.1:8086</influxdb.url>
+                              <influxdb.username>root</influxdb.username>
+                              <influxdb.password>root</influxdb.password>
+                              <influxdb.database.name>spider_monitor_dev</influxdb.database.name>
+                      </properties>
+              </profile>
+	 		  <profile>
+                  <id>test</id>
+                      <properties>
+                              <package.environment>test</package.environment>
+                              
+                              
+                              <!-- google vps mongo -->
+                              <mongo.google.host>172.16.7.161</mongo.google.host>
+                              <mongo.google.port>27017</mongo.google.port>
+                              <mongo.google.dbname>spider_55haitao</mongo.google.dbname>
+                              <mongo.google.user></mongo.google.user>
+                              <mongo.google.passwd></mongo.google.passwd>
+                              
+                              <!-- mongo -->
+                              <mongo.host>172.16.7.161</mongo.host>
+                              <mongo.port>27017</mongo.port>
+                              <mongo.dbname>spider_55haitao</mongo.dbname>
+                              <mongo.user></mongo.user>
+                              <mongo.passwd></mongo.passwd>
+                              
+                              <!-- mysql -->
+                              <mysql.host>172.16.7.161</mysql.host>
+                              <mysql.port>3306</mysql.port>
+                              <mysql.username>root</mysql.username>
+                              <mysql.password>liushizhen</mysql.password>
+                              <mysql.dbname>spider_55haitao</mysql.dbname>
+                              <mysql.driverClassName>com.mysql.jdbc.Driver</mysql.driverClassName>
+                              <mysql.initialSize>3</mysql.initialSize>
+                              <mysql.minIdle>10</mysql.minIdle>
+                              <mysql.maxIdle>15</mysql.maxIdle>
+                              <mysql.maxActive>20</mysql.maxActive>
+                              <mysql.maxWait>60000</mysql.maxWait>
+                              <mysql.timeBetweenEvictionRunsMillis>60000</mysql.timeBetweenEvictionRunsMillis>
+                              <mysql.minEvictableIdleTimeMillis>300000</mysql.minEvictableIdleTimeMillis>
+                              <mysql.validationQuery>SELECT 'x'</mysql.validationQuery>
+                              <mysql.testWhileIdle>true</mysql.testWhileIdle>
+                              <mysql.testOnBorrow>false</mysql.testOnBorrow>
+                              <mysql.testOnReturn>false</mysql.testOnReturn>
+                              
+                              <realtime.address>http://172.16.7.161:8080/spider-55haitao-realtime/realtime-crawler/pricing.action</realtime.address>
+                              
+                              <!-- region -->
+                              <region>region</region>
+                              
+                              <redis>redis://:spider55haitao@127.0.0.1:6379</redis>
+                              
+                              <!-- influxdb -->
+                              <influxdb.url>http://172.16.7.161:8086</influxdb.url>
+                              <influxdb.username>root</influxdb.username>
+                              <influxdb.password>root</influxdb.password>
+                              <influxdb.database.name>spider_monitor_test</influxdb.database.name>
+                      </properties>
+              </profile>
+              <profile>
+                  <id>prerelease</id>
+                      <properties>
+                              <package.environment>prerelease</package.environment>
+                              
+                              <!-- google vps mongo -->
+                              <mongo.google.host>10.26.197.128</mongo.google.host>
+                              <mongo.google.port>27017</mongo.google.port>
+                              <mongo.google.dbname>spider_55haitao</mongo.google.dbname>
+                              <mongo.google.user></mongo.google.user>
+                              <mongo.google.passwd></mongo.google.passwd>
+                              
+                              <!-- mongo -->
+                              <mongo.host>10.26.197.128</mongo.host>
+                              <mongo.port>27017</mongo.port>
+                              <mongo.dbname>spider_55haitao</mongo.dbname>
+                              <mongo.user></mongo.user>
+                              <mongo.passwd></mongo.passwd>
+                              
+                              <!-- mysql -->
+                              <mysql.host>10.26.197.128</mysql.host>
+                              <mysql.port>3306</mysql.port>
+                              <mysql.username>spider</mysql.username>
+                              <mysql.password>spider_55haitao</mysql.password>
+                              <mysql.dbname>spider_55haitao_prerelease</mysql.dbname>
+                              <mysql.driverClassName>com.mysql.jdbc.Driver</mysql.driverClassName>
+                              <mysql.initialSize>3</mysql.initialSize>
+                              <mysql.minIdle>10</mysql.minIdle>
+                              <mysql.maxIdle>15</mysql.maxIdle>
+                              <mysql.maxActive>20</mysql.maxActive>
+                              <mysql.maxWait>60000</mysql.maxWait>
+                              <mysql.timeBetweenEvictionRunsMillis>60000</mysql.timeBetweenEvictionRunsMillis>
+                              <mysql.minEvictableIdleTimeMillis>300000</mysql.minEvictableIdleTimeMillis>
+                              <mysql.validationQuery>SELECT 'x'</mysql.validationQuery>
+                              <mysql.testWhileIdle>true</mysql.testWhileIdle>
+                              <mysql.testOnBorrow>false</mysql.testOnBorrow>
+                              <mysql.testOnReturn>false</mysql.testOnReturn>
+                              
+                              <realtime.address>http://10.26.197.128:8888/spider-55haitao-realtime/realtime-crawler/pricing.action</realtime.address>
+                              
+                              <!-- region -->
+                              <region>region</region>
+                              
+                              <redis>redis://:spider55haitao@10.26.197.128:6379</redis>
+                              
+                              <!-- influxdb -->
+                              <influxdb.url>http://10.26.197.128:8086</influxdb.url>
+                              <influxdb.username>root</influxdb.username>
+                              <influxdb.password>root</influxdb.password>
+                              <influxdb.database.name>spider_monitor_prerelease</influxdb.database.name>
+                              <google.query.taskId.url>http://104.197.229.122:9090/spider-55haitao-ui/items/queryTaskIdByUrl.action</google.query.taskId.url>
+                      </properties>
+              </profile>
+              <profile>
+                  <id>product</id>
+                      <properties>
+                              <package.environment>product</package.environment>
+                              
+                              <!-- google vps mongo -->
+                              <mongo.google.host>10.26.97.231</mongo.google.host>
+                              <mongo.google.port>9352</mongo.google.port>
+                              <mongo.google.dbname>spider_55haitao</mongo.google.dbname>
+                              <mongo.google.user></mongo.google.user>
+                              <mongo.google.passwd></mongo.google.passwd>
+                              
+                              <!-- mongo -->
+                              <!-- <mongo.rs>10.47.123.138:27017,10.47.123.178:27017,10.46.69.124:27017</mongo.rs>
+                              <mongo.uri>55haitao:spider_55haitao@admin</mongo.uri>
+                              <mongo.dbname>spider_55haitao</mongo.dbname> -->
+                              
+                              <mongo.rs>dds-bp1d36186b2d7c741.mongodb.rds.aliyuncs.com:3717,dds-bp1d36186b2d7c742.mongodb.rds.aliyuncs.com:3717</mongo.rs>
+                              <mongo.uri>55haitao:spider_55haitao@admin</mongo.uri>
+                              <mongo.dbname>spider_55haitao</mongo.dbname>
+                              
+                              <!-- mysql -->
+                              <mysql.host>10.26.197.128</mysql.host>
+                              <mysql.port>3306</mysql.port>
+                              <mysql.username>spider</mysql.username>
+                              <mysql.password>spider_55haitao</mysql.password>
+                              <mysql.dbname>spider_55haitao</mysql.dbname>
+                              <mysql.driverClassName>com.mysql.jdbc.Driver</mysql.driverClassName>
+                              <mysql.initialSize>3</mysql.initialSize>
+                              <mysql.minIdle>10</mysql.minIdle>
+                              <mysql.maxIdle>15</mysql.maxIdle>
+                              <mysql.maxActive>20</mysql.maxActive>
+                              <mysql.maxWait>60000</mysql.maxWait>
+                              <mysql.timeBetweenEvictionRunsMillis>60000</mysql.timeBetweenEvictionRunsMillis>
+                              <mysql.minEvictableIdleTimeMillis>300000</mysql.minEvictableIdleTimeMillis>
+                              <mysql.validationQuery>SELECT 'x'</mysql.validationQuery>
+                              <mysql.testWhileIdle>true</mysql.testWhileIdle>
+                              <mysql.testOnBorrow>false</mysql.testOnBorrow>
+                              <mysql.testOnReturn>false</mysql.testOnReturn>
+                              
+                              <realtime.address>http://118.178.57.55:8080/spider-55haitao-realtime/realtime-crawler/pricing.action</realtime.address>
+                              
+                              <!-- region -->
+                              <region>region</region>
+                              
+                              <redis>redis://:spider55haitao@10.24.32.17:12002</redis>
+                              
+                              <!-- influxdb -->
+                              <influxdb.url>http://10.26.197.128:8086</influxdb.url>
+                              <influxdb.username>root</influxdb.username>
+                              <influxdb.password>root</influxdb.password>
+                              <influxdb.database.name>spider_monitor_product</influxdb.database.name>
+                              <influxdb.database.name>spider_monitor_product</influxdb.database.name>
+                              <google.query.taskId.url>http://104.197.229.122:9090/spider-55haitao-ui/items/queryTaskIdByUrl.action</google.query.taskId.url>
+                      </properties>
+              </profile>
+              <profile>
+                  <id>ms</id>
+                  <activation>
+		                <activeByDefault>true</activeByDefault>
+		              </activation>
+                      <properties>
+                              <package.environment>ms</package.environment>
+                              
+                              <!-- google vps mongo -->
+                              <mongo.google.host>10.128.0.2</mongo.google.host>
+                              <mongo.google.port>27017</mongo.google.port>
+                              <mongo.google.dbname>spider_55haitao</mongo.google.dbname>
+                              <mongo.google.user></mongo.google.user>
+                              <mongo.google.passwd></mongo.google.passwd>
+                              
+                              <!-- ali vps mongo -->
+                              <mongo.rs>10.47.123.138:27017,10.47.123.178:27017,10.46.69.124:27017</mongo.rs>
+                              <mongo.uri>55haitao:spider_55haitao@admin</mongo.uri>
+                              <mongo.dbname>spider_55haitao</mongo.dbname>
+                              
+                              <!-- mysql -->
+                              <mysql.host>10.128.0.2</mysql.host>
+                              <mysql.port>3306</mysql.port>
+                              <mysql.username>spider_55haitao</mysql.username>
+                              <mysql.password>spider_55haitao</mysql.password>
+                              <mysql.dbname>spider_55haitao</mysql.dbname>
+                              <mysql.driverClassName>com.mysql.jdbc.Driver</mysql.driverClassName>
+                              <mysql.initialSize>3</mysql.initialSize>
+                              <mysql.minIdle>10</mysql.minIdle>
+                              <mysql.maxIdle>15</mysql.maxIdle>
+                              <mysql.maxActive>20</mysql.maxActive>
+                              <mysql.maxWait>60000</mysql.maxWait>
+                              <mysql.timeBetweenEvictionRunsMillis>60000</mysql.timeBetweenEvictionRunsMillis>
+                              <mysql.minEvictableIdleTimeMillis>300000</mysql.minEvictableIdleTimeMillis>
+                              <mysql.validationQuery>SELECT 'x'</mysql.validationQuery>
+                              <mysql.testWhileIdle>true</mysql.testWhileIdle>
+                              <mysql.testOnBorrow>false</mysql.testOnBorrow>
+                              <mysql.testOnReturn>false</mysql.testOnReturn>
+                              
+                              <realtime.address>http://118.178.57.55:8080/spider-55haitao-realtime/realtime-crawler/pricing.action</realtime.address>
+                              
+                              <!-- region -->
+                              <region>region</region>
+                              
+                              <redis>redis://:spider55haitao@10.128.0.2:6379</redis>
+                              
+                              <!-- influxdb -->
+                              <influxdb.url>http://10.128.0.2:8086</influxdb.url>
+                              <influxdb.username>root</influxdb.username>
+                              <influxdb.password>root</influxdb.password>
+                              <influxdb.database.name>spider_monitor_ms</influxdb.database.name>
+                              <google.query.taskId.url>http://104.197.229.122:9090/spider-55haitao-ui/items/queryTaskIdByUrl.action</google.query.taskId.url>
+                      </properties>
+              </profile>
+      </profiles>
+</project>

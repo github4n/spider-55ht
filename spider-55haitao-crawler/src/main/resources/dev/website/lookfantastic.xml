@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rules xmlns="http://www.55haitao.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<rule grade="0">
+		<selectlookfantasticurls input="${doc}"  css="ul>li div a"  attr="abs:href" type="LINK" output="newurls" grade="1"/>
+	</rule>	
+
+	<rule grade="1">
+		<selectlookfantasticurls input="${doc}"  css="div#divSearchResults a:has(img)"  attr="abs:href" type="ITEM"  output="newurls" grade="3"/>
+		<selectlookfantasticpages input="${doc}" cssTemplateUrl="div.pagination_pageNumbers a:first-child" attrTemplateUrl="abs:href" cssTotalPages="div.pagination_pageNumbers a:last-child" attrTotalPages="text" replaceRegex="pageNumber=\d+" replaceFormat="pageNumber={}"  startIndex="1" output="newurls" grade="2"/>
+	</rule>
+        <rule grade="2">
+                <selectlookfantasticurls input="${doc}"  css="div#divSearchResults a:has(img)"  attr="abs:href" type="ITEM"  output="newurls" grade="3"/>
+        </rule>
+
+        <rule regex=".*www.lookfantastic.com.*" grade="3">
+                <lookfantastic input="${doc}" output="retbody" />
+		<output channel="kafka" fields="retbody" />
+        </rule>
+
+</rules>

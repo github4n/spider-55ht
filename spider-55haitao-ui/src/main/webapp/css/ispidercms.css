@@ -1,0 +1,250 @@
+@charset "utf-8";
+/*cmsUI登陆开始*/
+.login-bg {background:url(../images/admin-login-bg.jpg) center top no-repeat #aed9f8;}
+.login-wrap { width:456px; margin:0 auto; margin-top:150px}
+.login-top { background:url(../images/admin-login-top.jpg) no-repeat; height:73px;}
+.login-main { background:url(../images/admin-login-main.png) no-repeat; height:242px;}
+.login-main ul { padding:10px 0 40px 85px;}
+.login-main ul li { height:48px; font-size:14px; line-height:48px; font-weight:bold; color:#626262}
+.login-main ul li label { width:68px; text-align:right; display:inline-block} 
+.login-main ul li .input {}
+.login-main .alert-error { width:426px; margin:0 auto; visibility:hidden;}
+.login-shadow { background: url(../images/admin-login-shadow.png) no-repeat; height:15px}
+.form-submit { height:48px;  text-align:center; padding-top:10px }
+.confirm-btn { background: url(../images/button.jpg) no-repeat; height:30px; width:115px; color:#fff; letter-spacing:0px; border:0;cursor:pointer;}
+.input { height:28px; line-height:28px; border:1px #b3b3b3 solid;  background:url(../images/input-bg.png); }
+.mt10 { margin:10px 0 0 0 }
+/*cmsUI登陆结束*/
+
+
+
+/*cmsUI公共开始*/
+html, body { height: 100%;}
+.left {float:left;}
+.header { width:100% ; height:65px; background:url(../images/header-bg.png)}
+.header .logo { width:360px;  height:65px; }
+.bar { background:url(../images/bar-bg.png) ; height:45px;}
+.bar .location { margin-left:260px; line-height:45px; padding-left:48px; color: #999;  background:url(../images/home-icon.gif) 15px center no-repeat; width:535px; float:left; display: inline}
+.bar .location a,.bar .location b { color:#666; margin:0 5px; }
+.bar .search-wrap { float:left; width:226px;}
+.search-wrap { margin-top:7px; _margin-top:5px;}
+.search-wrap input {vertical-align:middle}
+.search-wrap .search-input { border:0; background:url(../images/search-input.png) no-repeat; width:193px; height:30px; line-height:30px;}
+.search-wrap .search-btn { border:0 ; background:url(../images/search-btn.png) no-repeat; width:33px; height:30px; cursor:pointer; }
+.wrap { width: 100%; height: 100%; }
+.fixed { float: left; width: 260px;   margin-left: -100%; position:relative; z-index:10 }
+.user-info { background:url(../images/user-bg.png) no-repeat; width:260px; height:107px;}
+.user-info-box { padding:15px 22px 0 19px;}
+.user-info-box img { float:left}
+.user-status { margin-left:100px; text-align:center;_margin-left:20px; }
+.user-status h2 { color:#fff; font-size:12px; line-height:18px;  width:120px;   height:36px; }
+.user-status a { color:#fff;margin:2px 0  2px 0  }
+.user-status a:hover { text-decoration:underline}
+.user-status .status { background: url(../images/user-btn.png) no-repeat; width:120px; height:32px; display:block; text-align:center; line-height:32px;  font-size:14px; color:#fff; margin:0 auto}
+.nav {border-bottom: 1px solid #A9A9A9;}
+.nav ul { width:260px}
+.nav li { background:url(../images/nav-bg.png); height:39px;line-height:39px; border-top: solid 1px #b4b4b4}
+.nav li .home-icon { background:url(../images/home-tep-icon.gif) no-repeat 30px center}
+.nav li .compare-icon { background:url(../images/compare-icon.gif)  no-repeat 30px center}
+.nav li .cate-icon { background:url(../images/cate-icon.gif)  no-repeat 30px center}
+.nav li .user-icon { background:url(../images/user-icon.gif)  no-repeat 30px center}
+.nav li .item-icon { background:url(../images/item-icon.gif)  no-repeat 30px center}
+.nav li .rate-icon { background:url(../images/rate-icon.gif)  no-repeat 30px center}
+.nav li .b2c-icon { background:url(../images/b2c-icon.gif)  no-repeat 30px center}
+.nav li .search-icon { background:url(../images/search-icon.gif)  no-repeat 30px center}
+.nav li .wordset-icon {background: url(../images/wordset-icon.gif) no-repeat 30px center}
+.nav li .member-icon {background: url(../images/member-icon.gif) no-repeat 30px center}
+.nav .last { border-bottom:1px #a9a9a9 solid; }
+.nav li a { display:block; font-size:14px; color:#333; text-indent:58px;border-right:1px #fff solid;border-right:1px #a9a9a9 solid; width:259px; height:39px; }
+.nav li a:hover,.nav .current a  { background-color:#fff;border-right:1px #fff solid; }
+.nav .current a { font-weight:bold}
+
+
+
+.main {float: left; width: 100%;background: url(../images/menu-bg.png) repeat-y;}
+.main-inner { margin-left: 260px; height: 100%; background: url(../images/main-bg.jpg) right top no-repeat; }
+.inner-box { padding:10px; }
+.nav-sub-bar { width:800px; overflow: hidden; margin-bottom:10px;}
+.nav-sub-bar .search-wrap { float:right; margin:0}
+.nav-sub-bar .search-wrap .search-input { background-image:url(../images/search-input2.png)}
+.nav-sub-bar .search-wrap b { margin:0 10px 0; color:#999; font-weight:normal}
+.add-user {width:70px; height:30px; background:url(../images/add-btn.gif) no-repeat; cursor:pointer; line-height:30px; padding-left:20px; color:#fff; display:block; margin:0 auto}
+.add-user:hover { background:url(../images/add-btn-hover.gif)}
+.nav-sub { height:30px; line-height:30px; float:left;}
+.nav-sub a { color:#666; display: inline-block; padding:0 5px 0px; background:url(../images/apart-line.gif) no-repeat  right center}
+.nav-sub .current { font-weight:bold;color:#0069d5}
+.nav-sub a:hover,.bar .location a:hover,.selectall a:hover { color:#0069d5}
+.nav-sub .last { background:none}
+
+.footer { background:url(../images/footer-bg.png); clear:both; height:56px}
+
+.alert-sucess,.alert-error { height:25px; line-height:25px; margin-bottom:10px; width:772px; background: url(../images/sucess-icon.png) #f2f2f2 12px center no-repeat; padding:6px 14px 6px; }
+.alert-error { background-image:url(../images/error-icon.png)}
+.alert-sucess p,.alert-error p { padding-left:48px; float:left; width:200px;}
+.alert-sucess p b,.alert-error p b { font-size:14px}
+.alert-sucess a,.alert-error a  { display:block;float:right; width:25px; background:url(../images/close-icon.png) no-repeat; text-indent:-9999px; height:25px;}
+
+.welcome { text-align:center; margin:20px; height:500px; vertical-align:middle; line-height:500px;}
+.thead { font-size:14px; background:#EEEEEE;}
+.border-b { border-bottom:1px solid #dedede; }
+.border-l {border-left:1px solid #dedede;}
+.talbe-model thead tr .text-r,.talbe-model tbody tr .text-r { text-align:right}
+/*cmsUI公共结束*/
+/*cms表格模块开始*/
+.table-wrap { width:800px}
+.table-wrap-box { border:3px #eee solid; background:#fff; margin-bottom:10px;}
+.talbe-model { width:100%}
+.talbe-model thead,.form-model h3,.category-model h3,.text-box h3 { height:39px;line-height:36px; background:url(../images/h-bar-bg.png) repeat-x ; font-weight:bold;  font-size:14px; color:#555}
+.refresh {  display:inline-block; background:url(../images/refresh.gif) right center no-repeat; width:60px; font-size:12px; color:#999; font-weight:normal;}
+.refresh:hover { color:#555}
+.talbe-model thead .w60 { width:60px;}
+.talbe-model thead .w100,.w100{ width:105px;}
+.w200 { width:200px;}
+
+.talbe-model thead .w-ctgr { width:140px;}
+.talbe-model thead .w-sort,.w-sort { width:60px;}
+
+.talbe-model thead tr td,.talbe-model tbody tr td { text-align:center; height:42px; line-height:24px; color:#555; padding:0 5px}
+.talbe-model thead tr td { height:36px; line-height:36px;}
+.talbe-model tbody tr td img { width:60px; height:40px;}
+.talbe-model tbody tr:hover { background:#f4f4f4; }
+.talbe-model .group-table tr:hover {background: none }
+.talbe-model .group-table tr:hover .edit-icon { background:url(../images/edit-btn.png)}
+.talbe-model .group-table tr:hover .delete-icon { background:url(../images/delete-btn.png)} 
+.talbe-model .group-table tr:hover .pass-icon { background:url(../images/pass-btn.png)}
+.talbe-model .group-table tr:hover .disable-icon { background:url(../images/Disable-btn.png)}
+.talbe-model .group-table tr:hover .set-icon { background-image:url(../images/set-btn.png)}
+.talbe-model .group-table tr:hover .add-icon { background-image:url(../images/add-btn2.png)}
+.talbe-model .group-table tr:hover .redo-icon{ background-image:url(../images/redo-btn.png)}
+.talbe-model .group-table tr:hover .sort-icon{ background-image:url(../images/sort-btn.png)}
+.talbe-model .group-table tr td table tr:hover { background:#f4f4f4; }
+.talbe-model .group-table tr td table tr:hover .edit-icon { background:url(../images/edit-btn-hover.png)}
+.talbe-model .group-table tr td table tr:hover .delete-icon { background:url(../images/delete-btn-hover.png)} 
+.talbe-model .group-table tr td table tr:hover .pass-icon { background:url(../images/pass-btn-hover.png)}
+.talbe-model .group-table tr td table tr:hover .disable-icon { background:url(../images/Disable-btn-hover.png)}
+.talbe-model .group-table tr td table tr:hover .set-icon { background-image:url(../images/set-btn-hover.png)}
+.talbe-model .group-table tr td table tr:hover .add-icon { background-image:url(../images/add-btn2-hover.png)}
+.talbe-model .group-table tr td table tr:hover .redo-icon{ background-image:url(../images/redo-btn-hover.png)}
+.talbe-model .group-table tr td table tr:hover .sort-icon{ background-image:url(../images/sort-btn-hover.png)}
+
+
+.talbe-model tbody tr:hover .edit-icon { background:url(../images/edit-btn-hover.png)}
+.talbe-model tbody tr:hover .delete-icon { background:url(../images/delete-btn-hover.png)} 
+.talbe-model tbody tr:hover .pass-icon { background:url(../images/pass-btn-hover.png)}
+.talbe-model tbody tr:hover .disable-icon { background:url(../images/Disable-btn-hover.png)}
+.talbe-model tbody tr:hover .set-icon { background-image:url(../images/set-btn-hover.png)}
+.talbe-model tbody tr:hover .add-icon { background-image:url(../images/add-btn2-hover.png)}
+.talbe-model tbody tr:hover .redo-icon{ background-image:url(../images/redo-btn-hover.png)}
+.talbe-model tbody tr:hover .sort-icon{ background-image:url(../images/sort-btn-hover.png)}
+
+
+.edit-icon,.delete-icon,.pass-icon,.disable-icon,.set-icon,.add-icon,.redo-icon,.sort-icon{ display: inline-block; height:25px; width:25px; background:url(../images/edit-btn.png) no-repeat;  margin-right:10px; vertical-align:middle}
+.delete-icon { background:url(../images/delete-btn.png) no-repeat;} 
+.set-icon { background-image:url(../images/set-btn.png)}
+.add-icon { background-image:url(../images/add-btn2.png)}
+.redo-icon { background-image:url(../images/redo-btn.png)}
+.sort-icon { background-image:url(../images/sort-btn.png)	}
+
+.table-bottom { background:url(../images/page-no-bg.png); height:48px; line-height:48px; padding:0 24px 0}
+.selectall { float:left; width:160px; height:48px; line-height:48px;}
+.selectall .check-all { vertical-align:middle; margin-bottom:3px; margin-right:25px;}
+.selectall a,.pag-no a { color:#666; margin:0 5px 0}
+.pag-no { float:right; width:450px; text-align: right; height:48px; line-height:48px; }
+.pag-no a { display:inline-block; padding:0 8px 0; line-height:24px; }
+.pag-no .current { color: #666; background:#fff; font-weight:bold;border:1px solid #ccc}
+/*cms表格模块结束*/
+
+
+
+/*cms添加,编辑 开始*/
+
+.form-model { color:#555; }
+.form-model h3,.category-model h3 { text-indent:1em}
+.form-model ul { padding:20px 10px 0}
+.form-model ul li { height:54px; line-height:28px;}
+.form-model ul li label { display:inline-block; width:100px; text-align:right; font-size:14px; padding-right:10px; }
+.form-model ul .upload-img { height:auto}
+.upload-preview { margin-left:110px}
+.upload-preview span { display:inline-block; margin: 0 10px 10px 0; }
+.upload-preview a {  line-height:32px; color:#999; text-align:center;display:block;}
+.upload-preview a:hover { color:#0069d5}
+
+.upload-preview span img { width:50px; height:50px; border:1px #CCC solid; padding:2px}
+.form-model ul .form-align span label { width:auto; padding:0 12px 0 0; font-size:12px; height:36px; line-height:36px;}
+.form-model ul .editor label { height:36px; line-height:36px;}
+.form-model ul .form-align { overflow: hidden; height: auto}
+.form-model ul .form-align label { float:left}
+.form-author { float:left; width:650px;}
+.editor .editor-area { width:100%; margin:0 auto; margin-bottom:10px;}
+.form-align input { vertical-align:middle; margin-top:-3px; margin-right:5px}
+.form-align span { white-space:nowrap; display:inline}
+.submit-box,.text-box { height:30px; line-height:30px; border-top:1px #bfbfbf dashed; text-align:center; padding:  12px 0}
+.text-box { height:100%; overflow:hidden; border:none}
+ul .text-box label { padding:0}
+.text-box label { display:block; float:left ; font-size: 14px;
+    text-align: right;
+    width: 100px; padding-left:10px}
+ul .text-box .textarea { margin-left:10px; width:580px;}
+.text-box .textarea { background:url(../images/textarea-bg.gif); width:480px; height:100px;border: 1px solid #B3B3B3; float:left; margin:0 20px 0 17px;}
+.submit-box .defult-btn,.text-box .defult-btn,.defult-btn { display:inline-block; background:url(../images/defult-btn.png); width:90px; height:30px; border:0; color:#fff; margin-right:20px; cursor:pointer}
+.text-box .defult-btn { margin-top:30px;}
+.textarea-input { background:url(../images/textarea-bg.gif); border:1px solid #B3B3B3}
+.set,.noset { display:block; background: url(../images/set.gif) no-repeat left 3px; width:40px; margin:0 auto; padding-left:20px}
+.noset { background-position: left -26px;}
+
+/*cms添加,编辑 开始*/
+
+/*cms首页模板管理开始*/
+.up-icon,.down-icon { background:url(../images/up-icon.gif) no-repeat; display:inline-block; width:12px; height:12px; margin:0 6px;}
+.down-icon { background:url(../images/down-icon.gif)}
+.up-icon:hover { background-image:url(../images/up-icon-hover.gif)}
+.down-icon:hover { background-image:url(../images/down-icon-hover.gif)}
+.w-sort a { font-size:12px; margin-left:3px; color:#a0a7ab} 
+.w-set { width:100px;}
+.w-set select{ vertical-align:middle; margin-bottom:3px;}
+.w-sort a:hover { color:#0069d5}
+/*cms首页模板管理结束*/
+
+/*cms商品比较设置开始*/
+.nav-sub .showmodel { background:none; }
+.nav-sub span { margin-left:5px; font-weight:bold}
+
+/*cms商品比较设置开始*/
+
+
+
+
+/*cms分类管理开始*/
+.tree-wrap { width:270px;  overflow-x: auto;
+     }
+.category-model { overflow: hidden; height:100%}
+.category-model .talbe-model,.category-model .form-model { width:524px}
+.category-model .talbe-model thead,.category-model .form-model h3 { background:none; font-size:12px; border-bottom: 1px dashed #BFBFBF; background-color:#f4f4f4; height:30px; line-height:30px;}
+/*cms分类管理结束*/
+
+
+/*cms商品信息管理开始*/
+.property-list li { height:24px; line-height:24px;}
+.editor-box { padding:10px;}
+.editor-box h3 { text-indent:1em; height:54px; line-height:54px; color:#555}
+.editor-box .text-edit { width:770px; margin:20px 0px}
+/*cms商品信息管理结束*/
+
+/*cms搜索入口管理开始*/
+.pass-icon { background:url(../images/pass-btn.png)}
+.disable-icon { background:url(../images/Disable-btn.png)}
+/*cms搜索入口管理结束*/
+
+
+
+
+/*cms同义词设置开始*/
+.text-box h3 { text-align:left; text-indent:1em; margin-bottom:20px;}
+
+
+/*cms同义词设置结束*/
+
+
+
+
+

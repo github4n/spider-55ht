@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.haitao55.spider.common.dao.impl.mysql.DictionaryMapper">
+	<sql id="allColumns">
+		id, type,name,value
+	</sql>
+
+	<select id="getDictionaries" resultType="com.haitao55.spider.common.dos.DictionaryDO">
+		select
+		any_value(id) id,type,any_value(name) name,any_value(value) value
+		from dictionary
+		group by type
+	</select>
+	
+	<!-- 根据type修改 -->
+	<update id="updateDictionary" parameterType="com.haitao55.spider.common.dos.DictionaryDO">
+		update dictionary
+		<trim prefix="set" suffixOverrides=",">
+		 	<if test="id != null and id != '' ">
+		 		id=#{id,jdbcType=INTEGER},
+		 	</if>
+		 	<if test="type != null and type != '' ">
+		 		type=#{typeParam,jdbcType=VARCHAR},
+		 	</if>
+		 	<if test="name != null and name != '' ">
+		 		name=#{nameParam,jdbcType=VARCHAR},
+		 	</if>
+		 	<if test="value != null and value != '' ">
+		 		value=#{value,jdbcType=VARCHAR}
+		 	</if>
+		</trim>
+		where type=#{type,jdbcType=VARCHAR}
+	</update>
+	<delete id="deleteDictionary" parameterType="com.haitao55.spider.common.dos.DictionaryDO">
+		delete from dictionary where type=#{type,jdbcType=VARCHAR}
+	</delete>
+	
+	<!--查询字典项下所有字典数据  -->
+	<select id="getDictionaryDetails" parameterType="com.haitao55.spider.common.dos.DictionaryDO" resultType="com.haitao55.spider.common.dos.DictionaryDO" >
+		select <include refid="allColumns" /> 
+		from dictionary where type=#{type,jdbcType=VARCHAR}
+	</select>
+</mapper>

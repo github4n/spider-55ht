@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rules xmlns="http://www.55haitao.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+
+	<rule grade="0">
+		<selecturls input="${doc}" css="ul.o-menu.js-top-level li a"  attr="href" type="LINK" output="newurls" grade="1"/>
+                <concaturls prefix="http://www.beautybay.com" contains="http://" />
+	</rule>	
+
+	<rule grade="1">
+		<selectbeautybaypages input="${doc}" cssTemplateUrl="div.page-numbers div:last-child a" attrTemplateUrl="href" cssTotalPages="div.page-numbers div:last-child a" attrTotalPages="text" itemsPerPage="24"  replaceRegex="No-\d+" replaceFormat="No-{}" startIndex="1" type="LINK" grade="2" output="newurls" />
+		<selecturls input="${doc}" css="div.o-lister div a" type="ITEM" grade="3" output="newurls" />
+                <concaturls prefix="http://www.beautybay.com" contains="http://" />
+	</rule>
+
+	<rule grade="2">
+		<selecturls input="${doc}" css="div.o-lister div a" type="ITEM" grade="3" output="newurls" />
+                <concaturls prefix="http://www.beautybay.com" contains="http://" />
+	</rule>
+
+	<rule regex=".*www.beautybay.com.*" grade="3">
+
+		<md5 input="${url}" output="DOCID" />
+
+		<constant key="Site.host" value="www.beautybay.com" />
+
+		<concatbykey input="${url}" output="ProdUrl.url" />
+
+		<time unit="milliseconds" output="ProdUrl.discovery_time" />
+
+		<md5 input="${url}" output="ProdUrl.url_no" />
+
+		<select input="${doc}" css="span.u-h2.t-hx-lite.c-pp-info__name" output="Title.en" />
+
+		<select input="${doc}" css="div.product-detail a[itemprop=brand]" output="Brand.en" />
+
+		
+
+                <concat input="Title.en" suffix="," output="BreadCrumbTemp" />
+
+                <concatbykey input="BreadCrumbTemp" suffix="Brand.en" output="BreadCrumbTemp" />
+
+	        <array input="BreadCrumbTemp" splitChar="," output="BreadCrumb" />
+                
+                <array input="Title.en" splitChar="," output="Category" />
+
+	　　　　 <gender input="Title.en" output="s_gender"/>
+　　　　　　　　　　
+　　　　　　　　　 <gender input="BreadCrumb" output="s_gender"/>
+	 	
+　　　　　　　　　 <properties input="${doc}" input2="s_gender" output="Properties" />
+
+		
+		<beautybay input="${doc}" output="retbody" />
+		
+		<retbody output="retbody"/>
+		
+		<output channel="file" fields="retbody" />
+
+	</rule>
+
+</rules>

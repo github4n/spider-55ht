@@ -1,0 +1,112 @@
+<?xml version="1.0"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:cache="http://www.springframework.org/schema/cache"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-3.2.xsd
+    http://www.springframework.org/schema/mvc
+    http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+    http://www.springframework.org/schema/aop
+    http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+    http://www.springframework.org/schema/data/mongo
+    http://www.springframework.org/schema/data/mongo/spring-mongo-1.4.xsd
+    http://www.springframework.org/schema/cache
+    http://www.springframework.org/schema/cache/spring-cache-3.2.xsd
+    http://www.springframework.org/schema/util
+    http://www.springframework.org/schema/util/spring-util-3.2.xsd">
+    
+    <mvc:annotation-driven/>
+    
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>file:config/config.properties</value>
+            </list>
+        </property>
+    </bean>
+    
+    <!-- Services -->
+	<bean id="cleaningService" class="com.haitao55.spider.cleaning.service.impl.CleaningServiceImpl" >
+		<property name="itemDAO" ref="itemDAO" />
+		<property name="currentItemDAO" ref="currentItemDAO" />
+		<property name="ctorItemDAO" ref="ctorItemDAO" />
+        <property name="haiTunCunItemDAO" ref="haiTunCunItemDAO" />
+        <property name="taoBaoItemDAO" ref="taoBaoItemDAO" />
+		<property name="spiderKafkaProducer" ref="spiderKafkaProducer" />
+		<property name="topic" value="${kafka.to.se.topic}" />
+	</bean>
+
+    <bean id="baseMongoDAO" class="com.haitao55.spider.common.dao.impl.mongo.BaseMongoDAO" abstract="true" >
+	 	<property name="mongoTemplate" ref="mongoTemplate" />
+	</bean>    
+    
+    <!-- kafka Producer search  -->
+    <bean id="spiderKafkaProducer" class="com.haitao55.spider.common.kafka.SpiderKafkaProducerImpl">
+		<constructor-arg name="kafkaProps">
+			<props>
+					<prop key="bootstrap.servers">${kafka.to.se.servers}</prop>
+					<prop key="acks">${kafka.to.se.acks}</prop>
+					<prop key="retries">${kafka.to.se.retries}</prop>
+					<prop key="batch.size">${kafka.to.se.batch.size}</prop>
+					<prop key="linger.ms">${kafka.to.se.linger.ms}</prop>
+					<prop key="buffer.memory">${kafka.to.se.buffer.memory}</prop>
+					<prop key="key.serializer">${kafka.to.se.key.serializer}</prop>
+					<prop key="value.serializer">${kafka.to.se.value.serializer}</prop>
+			</props>
+		</constructor-arg>
+	</bean>
+    
+   
+    <bean id="itemDAO" class="com.haitao55.spider.common.dao.impl.mongo.ItemDAOImpl" parent="baseMongoDAO" />
+    <bean id="currentItemDAO" class="com.haitao55.spider.common.dao.impl.mongo.CurrentItemDAOImpl" parent="baseMongoDAO" />
+    <bean id="haiTunCunItemDAO" class="com.haitao55.spider.common.dao.impl.mongo.HaiTunCunItemDAOImpl" parent="baseMongoDAO" />
+    <bean id="taoBaoItemDAO" class="com.haitao55.spider.common.dao.impl.mongo.TaoBaoItemDAOImpl" parent="baseMongoDAO" />
+   	<!--竞品mongo-->
+   	<bean id="ctorItemDAO" class="com.haitao55.spider.common.dao.impl.mongo.CtorItemDAOImpl" parent="baseMongoDAO" />
+    
+    <!-- kafka Producer crawler -->
+    <bean id="spiderKafkaConsumerService" class="com.haitao55.spider.common.kafka.SpiderKafkaConsumerImpl" init-method="init">
+    	<property name="autoOffsetReset" value="${kafka.from.crawler.auto.offset.reset}" />
+		<property name="servers" value="${kafka.from.crawler.servers}" />
+		<property name="autoCimmitIntervalMs" value="${kafka.from.crawler.auto.commit.interval.ms}" />
+		<property name="sessionTimeOutMs" value="${kafka.from.crawler.session.timeout.ms}" />
+		<property name="enableAutoCommit" value="${kafka.from.crawler.enable.auto.commit}" />
+		<property name="maxPollRecords" value="${kafka.from.crawler.max.poll.records}" />
+		<property name="groupId" value="${kafka.from.crawler.group.id}" />
+		<property name="topic" value="${kafka.from.crawler.topic}" />
+		<property name="keySerializer" value="${kafka.from.crawler.key.serializer}" />
+		<property name="valueSerializer" value="${kafka.from.crawler.value.serializer}" />
+  	</bean>
+    
+    <!-- mongodb config -->
+    <mongo:mongo host="${mongo.host}" port="${mongo.port}"/>
+    <mongo:db-factory id="cleaningMongoFactory" mongo-ref="mongo" dbname="${mongo.dbname}" username="${mongo.user}" password="${mongo.passwd}"/>
+    <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+        <constructor-arg name="mongoDbFactory" ref="cleaningMongoFactory"/>
+    </bean>
+    
+    <!-- services -->
+    <bean id="bootstrap" class="com.haitao55.spider.cleaning.Bootstrap" init-method="init">
+        <property name="threadPoolProps">
+        	<map>
+        		<entry key="corePoolSize" value="${cleaning.siteDir.threadPoolProps.corePoolSize}" />
+        		<entry key="maximumPoolSize" value="${cleaning.siteDir.threadPoolProps.maximumPoolSize}" />
+        		<entry key="keepAliveTime" value="${cleaning.siteDir.threadPoolProps.keepAliveTime}" />
+        		<entry key="workQueueSize" value="${cleaning.siteDir.threadPoolProps.workQueueSize}" />
+        	</map>
+        </property>
+        <property name="consumer" ref="spiderKafkaConsumerService" />
+        <property name="cleanService" ref="cleaningService" />
+        <property name="outputRootPath" value="${cleaning.data.output.root.path}" />
+		<property name="outputFile" value="${cleaning.data.output.file}" />
+		<property name="cleaningAfterOutputRootPath" value="${cleaning.afte.data.output.root.path}" />
+    </bean>
+</beans>

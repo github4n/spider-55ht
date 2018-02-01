@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.haitao55.spider.common.dao.impl.mysql.RealtimeStatisticsMapper">
+	<sql id="allColumns">
+		task_id as taskId,task_name as taskName, realtime_time as realtimeTime, crawler, mongo, redis,exception
+	</sql>
+
+	<select id="findByPrimaryKey" resultType="com.haitao55.spider.common.dos.RealtimeStatisticsDO" parameterType="java.lang.String">
+		select
+		<include refid="allColumns" />
+		from realtime_statistics
+		where 1=1
+	    <if test="taskId != null">
+	     AND task_id = #{taskId,jdbcType=BIGINT}
+	    </if>
+	    <if test="realtimeTime != null">
+	     AND realtime_time = #{realtimeTime,jdbcType=VARCHAR}
+	    </if>
+	</select>
+</mapper>

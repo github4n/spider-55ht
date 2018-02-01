@@ -1,0 +1,46 @@
+	private static Map<String,Long> netMap = new ConcurrentHashMap<String, Long>();
+	private static Map<String,Long> http403Map = new ConcurrentHashMap<String, Long>();
+	private static final long ADSL_TIME = 60*60*1000;
+	private static final long HTTP_403_TIME = 3*60*1000;
+
+synchronized (netMap) {
+			long current = System.currentTimeMillis();
+			Long begin = netMap.get("check");
+			if(null == begin){
+				netMap.put("check", current);
+			} else {
+				long time = current - begin;
+				if(time > ADSL_TIME){
+					logger.info("adsl time:"+System.currentTimeMillis());
+					ConnectNetWork.restartAdsl();
+					netMap.put("check", current);
+					telnetNet(current);
+					netMap.put("check", current);
+				}
+			}
+		}
+		String content = StringUtils.EMPTY;
+		for(int i = 0; i < 10; i++){
+			try{
+				content = this.getInputString(context);// 404 throw exception offline
+			}catch(HttpException e){
+				if(e != null && e.getStatus() == 403){
+					synchronized (http403Map) {
+						long current = System.currentTimeMillis();
+						Long begin = http403Map.get("http403");
+						if(null == begin){
+							http403Map.put("http403", current);
+						} else {
+							long time = current - begin;
+							if(time > HTTP_403_TIME){
+								ConnectNetWork.restartAdsl();
+								http403Map.put("http403", current);
+								telnetNet(current);
+								http403Map.put("http403", current);
+							}
+						}
+					}
+				}
+				throw e;
+			}
+		}

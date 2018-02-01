@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rules xmlns="http://www.55haitao.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+	<rule grade="0">
+		<amazonselectallpages input="${html}" output="newurls" grade="1"/>
+	</rule>
+
+	<rule grade="1">
+		<amazonselecturls  input="${html}" type="ITEM" output="newurls" grade="2"/>
+	</rule>
+
+	<rule grade="2">
+		<amazonus input="${html}" output="retbody" />
+		<output channel="kafka" fields="retbody" />
+	</rule>
+</rules>

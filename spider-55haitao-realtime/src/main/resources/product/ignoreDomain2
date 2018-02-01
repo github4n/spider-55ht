@@ -1,0 +1,28 @@
+{
+    "ignoreDomain":[
+    ".*www.lookfantastic.com.*",
+    ".*www.katespade.com.*",
+    ".*www.saksfifthavenue.com.*",
+    ".*www.ralphlauren.com.*",
+    ".*shop.samsonite.com.*",
+    ".*www.amazon.com.*",
+    ".*www.bluefly.com.*",
+    ".*www.escentual.com.*",
+    ".*www.sephora.com.*",
+    ".*www1.macys.com.*",
+    ".*www.zappos.com.*",
+    ".*shop.nordstrom.com.*",
+    ".*www.selfridges.com.*",
+    ".*www.marcjacobs.com.*",
+    ".*www.yslbeautyus.com.*",
+    ".*www.mytheresa.com.*",
+    ".*www.foreo.com.*",
+    ".*www.mikihouse.jp.*",
+    ".*www.rebeccaminkoff.com.*",
+    ".*www.mankind.co.uk.*",
+    ".*www.dinos.co.jp.*",
+    ".*www.beautybay.com.*",
+    ".*www.lordandtaylor.com.*",
+    ]
+
+}

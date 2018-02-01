@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.haitao55.spider.common.dao.impl.mysql.HeartbeatMapper">
+	
+	<select id="getHeartbeatByIpAndProcId" parameterType="com.haitao55.spider.common.dos.HeartbeatDO" resultType="com.haitao55.spider.common.dos.HeartbeatDO">
+		select ip, proc_id, thread_count, time from heartbeat
+		where ip = #{ip} and proc_id = #{procId};
+	</select>
+	
+	<insert id="addHeartbeat" parameterType="com.haitao55.spider.common.dos.HeartbeatDO">
+		INSERT INTO heartbeat (ip, proc_id, thread_count, time)
+		VALUES (#{ip}, #{procId}, #{threadCount}, #{time});
+	</insert>
+	
+	<update id="updateHeartbeat" parameterType="com.haitao55.spider.common.dos.HeartbeatDO">
+		update heartbeat set 
+			thread_count=#{threadCount}, 
+			time=#{time}
+		where ip = #{ip} and proc_id = #{procId};
+	</update>
+	
+	<delete id="clear">
+		delete from heartbeat;
+	</delete>
+</mapper>

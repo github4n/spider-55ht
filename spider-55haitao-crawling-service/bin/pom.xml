@@ -1,0 +1,141 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  
+  	<parent>
+		<groupId>com.haitao55.spider</groupId>
+		<artifactId>spider-55haitao</artifactId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
+  
+  <groupId>com.haitao55.spider.crawling.service</groupId>
+  <artifactId>spider-55haitao-crawling-service</artifactId>
+  <packaging>war</packaging>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>spider-55haitao-crawling-service Maven Webapp</name>
+  <url>http://maven.apache.org</url>
+  
+  <properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.test.skip>true</maven.test.skip>
+		<downloadSources>true</downloadSources>
+		<java_source_version>1.8</java_source_version>
+		<java_target_version>1.8</java_target_version>
+		<file_encoding>UTF-8</file_encoding>
+		<springframework.version>4.3.2.RELEASE</springframework.version>
+  </properties>  
+  
+  
+  <dependencies>
+	<dependency>
+		<groupId>com.haitao55.spider</groupId>
+		<artifactId>spider-55haitao-crawler</artifactId>
+		<version>1.0-SNAPSHOT</version>
+	</dependency>
+	<dependency>
+	    <groupId>commons-fileupload</groupId>
+	    <artifactId>commons-fileupload</artifactId>
+	    <version>1.3</version>
+	</dependency>
+  </dependencies>
+  <build>
+    <finalName>spider-55haitao-crawling-service</finalName>
+    <directory>target</directory>
+		<sourceDirectory>src/main/java</sourceDirectory>
+		<outputDirectory>src/main/webapp/WEB-INF/classes</outputDirectory>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+			<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.0.2</version>
+				<configuration>
+					<!-- http://maven.apache.org/plugins/maven-war-plugin/ -->
+					<warSourceDirectory>src/main/webapp</warSourceDirectory>
+				</configuration>
+			</plugin>
+		</plugins>
+  </build>
+  <profiles>
+		<profile>
+			<id>dev</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<package.environment>dev</package.environment>
+
+				<!-- mongo -->
+				<mongo.host>118.178.57.197</mongo.host>
+                <mongo.port>27017</mongo.port>
+                <mongo.dbname>spider_55haitao</mongo.dbname>
+                <mongo.user></mongo.user>
+                <mongo.passwd></mongo.passwd>
+
+			</properties>
+		</profile>
+		<profile>
+			<id>test</id>
+			<properties>
+				<package.environment>test</package.environment>
+
+				<!-- mongo -->
+				<mongo.host>172.16.7.161</mongo.host>
+				<mongo.port>27017</mongo.port>
+				<mongo.dbname>spider_55haitao</mongo.dbname>
+				<mongo.user></mongo.user>
+				<mongo.passwd></mongo.passwd>
+
+			</properties>
+		</profile>
+		<profile>
+			<id>prerelease</id>
+			<properties>
+				<package.environment>prerelease</package.environment>
+
+
+				<!-- mongo -->
+				<mongo.host>10.26.197.128</mongo.host>
+				<mongo.port>27017</mongo.port>
+				<mongo.dbname>spider_55haitao</mongo.dbname>
+				<mongo.user></mongo.user>
+				<mongo.passwd></mongo.passwd>
+
+			</properties>
+		</profile>
+		<profile>
+			<id>product</id>
+			<properties>
+				<package.environment>product</package.environment>
+
+				<!-- mongo -->
+				<mongo.host>10.26.97.231</mongo.host>
+				<mongo.port>9352</mongo.port>
+				<mongo.dbname>spider_55haitao</mongo.dbname>
+				<mongo.user></mongo.user>
+				<mongo.passwd></mongo.passwd>
+
+			</properties>
+		</profile>
+		<profile>
+			<id>ms</id>
+			<properties>
+				<package.environment>ms</package.environment>
+
+				<!-- ali vps mongo -->
+				<mongo.host>114.55.236.148</mongo.host>
+				<mongo.port>9352</mongo.port>
+				<mongo.dbname>spider_55haitao</mongo.dbname>
+				<mongo.user></mongo.user>
+				<mongo.passwd></mongo.passwd>
+
+			</properties>
+		</profile>
+	</profiles>
+  
+</project>

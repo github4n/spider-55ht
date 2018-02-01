@@ -1,0 +1,39 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+/*公用样式*/
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,form,fieldset,input,p,th,td
+	{
+	margin: 0;
+	padding: 0;
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+img {
+	border: 0;
+}
+a{ text-decoration:none;}
+ol,ul {
+	list-style: none;
+}
+
+body {
+	font-size: 12px;
+	color: #333333;
+}
+
+.clear {
+	clear: both;
+}
+
+em {
+	font-style: normal;
+}
+
+
+/*公用样式*

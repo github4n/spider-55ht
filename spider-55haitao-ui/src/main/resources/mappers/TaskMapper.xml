@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.haitao55.spider.common.dao.impl.mysql.TaskMapper">
+	<sql id="allColumns">
+		id, name, description, domain, init_url as initUrl, type, status, period, 
+		win_start as winStart, win_end as winEnd, create_time as createTime, update_time as updateTime, 
+		master, update_only as updateOnly, config, ratio, site_region as siteRegion, 
+		proxy_region_id as proxyRegionId, weight, pretreat_config as pretreatConfig
+	</sql>
+
+	<select id="getTaskById" parameterType="String" resultType="com.haitao55.spider.common.dos.TaskDO">
+		select
+		<include refid="allColumns" />
+		from task where id=#{id}
+	</select>
+	
+	<select id="getAllTasks" resultType="com.haitao55.spider.common.dos.TaskDO">
+		select
+		<include refid="allColumns" />
+		from task
+	</select>
+
+	<insert id="insert" parameterType="com.haitao55.spider.common.dos.TaskDO">
+		INSERT INTO task
+		(id, name, description, domain, init_url, type, status, period, win_start, win_end,
+		create_time, update_time, master, update_only, config, ratio, site_region, proxy_region_id,
+		weight, pretreat_config)
+		VALUES
+		(#{id}, #{name}, #{description}, #{domain}, #{initUrl}, #{type}, #{status}, #{period}, #{winStart}, 
+		#{winEnd}, #{createTime}, #{updateTime}, #{master}, #{updateOnly}, #{config}, #{ratio}, #{siteRegion}, 
+		#{proxyRegionId}, #{weight}, #{pretreatConfig});
+	</insert>
+	
+	<update id="update" parameterType="com.haitao55.spider.common.dos.TaskDO">
+		update task set 
+			name=#{name}, 
+			description=#{description}, 
+			domain=#{domain}, 
+			init_url=#{initUrl}, 
+			type=#{type}, 
+			status=#{status}, 
+			period=#{period}, 
+			win_start=#{winStart}, 
+			win_end=#{winEnd}, 
+			create_time=#{createTime}, 
+			update_time=#{updateTime}, 
+			master=#{master}, 
+			update_only=#{updateOnly}, 
+			config=#{config}, 
+			ratio=#{ratio}, 
+			site_region=#{siteRegion}, 
+			proxy_region_id=#{proxyRegionId}, 
+			weight=#{weight}, 
+			pretreat_config=#{pretreatConfig} 
+		where id=#{id};
+	</update>
+	
+	<update id="updateStatus" parameterType="java.util.HashMap">
+		update task set
+			status=#{newStatus} 
+		where id=#{taskId}
+	</update>
+	
+	<select id="queryByStatus" parameterType="String" resultType="com.haitao55.spider.common.dos.TaskDO">
+		select
+		<include refid="allColumns" />
+		from task where status=#{status}
+	</select>
+	
+	<select id="queryByType" parameterType="String" resultType="com.haitao55.spider.common.dos.TaskDO">
+		select
+		<include refid="allColumns" />
+		from task where type=#{type}
+	</select>
+	
+	<select id="switchStatus" parameterType="java.util.HashMap">
+		update task set
+			status = #{newStatus}
+		where status = #{oldStatus}
+	</select>
+</mapper>

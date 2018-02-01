@@ -1,0 +1,580 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.haitao55.spider</groupId>
+    <artifactId>spider-55haitao</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+
+  <groupId>com.haitao55.spider</groupId>
+  <artifactId>spider-55haitao-realtime</artifactId>
+  <packaging>war</packaging>
+  <name>spider-55haitao-realtime Maven Webapp</name>
+  <url>http://maven.apache.org</url>
+  
+  <properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.test.skip>true</maven.test.skip>
+		<downloadSources>true</downloadSources>
+		<java_source_version>1.8</java_source_version>
+		<java_target_version>1.8</java_target_version>
+		<file_encoding>UTF-8</file_encoding>
+		<springframework.version>4.3.2.RELEASE</springframework.version>
+	</properties>
+
+  <dependencies>
+        <dependency>
+	      <groupId>com.haitao55.spider</groupId>
+	      <artifactId>spider-55haitao-crawler</artifactId>
+	      <version>1.0-SNAPSHOT</version>
+<!-- 	      <exclusions> -->
+<!-- 	        <exclusion> -->
+<!-- 	          <groupId>xml-apis</groupId> -->
+<!-- 	          <artifactId>xml-apis</artifactId> -->
+<!-- 	        </exclusion> -->
+<!-- 	      </exclusions> -->
+	    </dependency>
+		<!-- 
+		<dependency>
+		  <groupId>com.b5m.spider</groupId>
+		  <artifactId>spider-dsc</artifactId>
+		  <version>${parent.version}</version>
+		  <exclusions>
+            <exclusion>
+              <groupId>tomcat</groupId>
+              <artifactId>jasper-compiler</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>tomcat</groupId>
+              <artifactId>jasper-runtime</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>org.mortbay.jetty</groupId>
+              <artifactId>jsp-api-2.1</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>org.mortbay.jetty</groupId>
+              <artifactId>jsp-2.1</artifactId>
+            </exclusion>
+            <exclusion>
+            	<groupId>postgresql</groupId>
+				<artifactId>postgresql</artifactId>
+            </exclusion>
+            <exclusion>
+            	<groupId>com.b5m.spider</groupId>
+				<artifactId>spider-category</artifactId>
+            </exclusion>
+            <exclusion>
+            	<groupId>org.slf4j</groupId>
+            	<artifactId>slf4j-log4j12</artifactId>
+            </exclusion>
+            <exclusion>
+            	<groupId>commons-configuration</groupId>
+				<artifactId>commons-configuration</artifactId>
+            </exclusion>
+            <exclusion>
+            	<groupId>commons-lang</groupId>
+				<artifactId>commons-lang</artifactId>
+            </exclusion>
+            <exclusion>
+            	<groupId>commons-logging</groupId>
+				<artifactId>commons-logging</artifactId>
+            </exclusion>
+            <exclusion>
+            	<groupId>log4j</groupId>
+				<artifactId>log4j</artifactId>
+            </exclusion>
+            <exclusion>
+            	<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-api</artifactId>
+            </exclusion>
+            <exclusion>
+            	<groupId>com.b5m.lib</groupId>
+				<artifactId>spider-filter</artifactId>
+            </exclusion>
+            <exclusion>
+            	<groupId>org.hbase</groupId>
+				<artifactId>asynchbase</artifactId>
+            </exclusion>
+            <exclusion>
+            	<groupId>org.apache.hbase</groupId>
+				<artifactId>hbase-common</artifactId>
+            </exclusion>
+            <exclusion>
+            	<groupId>org.apache.hbase</groupId>
+				<artifactId>hbase-client</artifactId>
+            </exclusion>
+            <exclusion>
+            	<groupId>org.apache.hadoop</groupId>
+				<artifactId>hadoop-core</artifactId>
+            </exclusion>
+     	  </exclusions>
+		</dependency>
+		 -->
+		 <dependency>
+		    <groupId>com.alibaba</groupId>
+		    <artifactId>druid</artifactId>
+		    <version>1.0.26</version>
+		</dependency>
+		<dependency>
+		  <groupId>jstl</groupId>
+		  <artifactId>jstl</artifactId>
+		  <version>1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>1.3</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.3.1</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>1.1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.freemarker</groupId>
+			<artifactId>freemarker</artifactId>
+			<version>2.3.19</version>
+		</dependency>
+		<dependency>
+			<groupId>org.javassist</groupId>
+			<artifactId>javassist</artifactId>
+			<version>3.18.1-GA</version>
+		</dependency>
+		<dependency>
+			<groupId>ognl</groupId>
+			<artifactId>ognl</artifactId>
+			<version>3.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.struts</groupId>
+			<artifactId>struts2-core</artifactId>
+			<version>2.2.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.struts</groupId>
+			<artifactId>struts2-spring-plugin</artifactId>
+			<version>2.3.16.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.struts.xwork</groupId>
+			<artifactId>xwork-core</artifactId>
+			<version>2.2.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>${springframework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+			<version>${springframework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aop</artifactId>
+			<version>${springframework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${springframework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+			<version>${springframework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<version>${springframework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>${springframework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			 <version>1.1.41</version>
+		</dependency>
+	</dependencies>
+	
+	<build>
+		<finalName>spider-55haitao-realtime</finalName>
+		<directory>target</directory>
+		<sourceDirectory>src/main/java</sourceDirectory>
+		<outputDirectory>src/main/webapp/WEB-INF/classes</outputDirectory>
+		<resources>
+			<resource>
+                <directory>src/main/resources/${active.profile}</directory>
+                <filtering>true</filtering>
+            </resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.0.2</version>
+				<configuration>
+					<!-- http://maven.apache.org/plugins/maven-war-plugin/ -->
+					<warSourceDirectory>src/main/webapp</warSourceDirectory>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	
+	<profiles>
+              <profile>
+                  <id>dev</id>
+                  <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+                      <properties>
+                      
+                              <active.profile>dev</active.profile>
+                              <package.environment>dev</package.environment>
+                              
+                              <!-- google vps mongo -->
+                              <mongo.google.host>127.0.0.1</mongo.google.host>
+                              <mongo.google.port>12345</mongo.google.port>
+                              <mongo.google.dbname>spider_55haitao</mongo.google.dbname>
+                              <mongo.google.user></mongo.google.user>
+                              <mongo.google.passwd></mongo.google.passwd>
+                              
+                              <!-- mongo -->
+<!--                               <mongo.host>127.0.0.1</mongo.host> -->
+<!--                               <mongo.port>27017</mongo.port> -->
+<!--                               <mongo.dbname>spider_55haitao</mongo.dbname> -->
+<!--                               <mongo.user></mongo.user> -->
+<!--                               <mongo.passwd></mongo.passwd> -->
+                              <!-- ali vps mongo -->
+  							  <mongo.rs>10.47.123.138:27017,10.47.123.178:27017,10.46.69.124:27017</mongo.rs>
+                              <mongo.uri>55haitao:spider_55haitao@admin</mongo.uri>
+                              <mongo.dbname>spider_55haitao</mongo.dbname>
+                              
+                              <!-- mysql -->
+                              <mysql.host>127.0.0.1</mysql.host>
+                              <mysql.port>3306</mysql.port>
+                              <mysql.username>zhaoxl</mysql.username>
+                              <mysql.password>zhaoxl</mysql.password>
+                              <mysql.dbname>spider_55haitao</mysql.dbname>
+                              <mysql.driverClassName>com.mysql.jdbc.Driver</mysql.driverClassName>
+                              <mysql.initialSize>3</mysql.initialSize>
+                              <mysql.minIdle>10</mysql.minIdle>
+                              <mysql.maxIdle>15</mysql.maxIdle>
+                              <mysql.maxActive>20</mysql.maxActive>
+                              <mysql.maxWait>60000</mysql.maxWait>
+                              <mysql.timeBetweenEvictionRunsMillis>60000</mysql.timeBetweenEvictionRunsMillis>
+                              <mysql.minEvictableIdleTimeMillis>300000</mysql.minEvictableIdleTimeMillis>
+                              <mysql.validationQuery>SELECT 'x'</mysql.validationQuery>
+                              <mysql.testWhileIdle>true</mysql.testWhileIdle>
+                              <mysql.testOnBorrow>false</mysql.testOnBorrow>
+                              <mysql.testOnReturn>false</mysql.testOnReturn>
+                              
+                              <!-- region -->
+                              <region>region</region>
+                              
+							  <!-- google核价标识 -->
+							  <google.realtime>google</google.realtime>
+
+                              <!-- kafka -->
+                              <kafka.haitao.topic.realtime>spider_crawler_55haitao</kafka.haitao.topic.realtime>
+                              <kafka.haitao.key>www.6pm.com</kafka.haitao.key>
+                              <kafka.bootstrap.servers>127.0.0.1:9092</kafka.bootstrap.servers>
+                              <kafka.acks>all</kafka.acks>
+                              <kafka.retries>3</kafka.retries>
+                              <kafka.batch.size>16384</kafka.batch.size>
+                              <kafka.linger.ms>1</kafka.linger.ms>
+                              <kafka.buffer.memory>33554432</kafka.buffer.memory>
+                              <kafka.key.serializer>org.apache.kafka.common.serialization.StringSerializer</kafka.key.serializer>
+                              <kafka.value.serializer>org.apache.kafka.common.serialization.StringSerializer</kafka.value.serializer>
+                              
+                              <redis>redis://:spider55haitao@127.0.0.1:6379</redis>
+                              
+                               <!-- upyun -->
+							  <upyun.bucketName>spider-prerelease</upyun.bucketName>
+							  <upyun.userName>shantao</upyun.userName>
+							  <upyun.password>qDnnAdOTfpoWc</upyun.password>
+							  <upyun.address>http://spider-prerelease.b0.upaiyun.com</upyun.address>
+                      </properties>
+              </profile>
+              <profile>
+                  <id>test</id>
+                      <properties>
+                              <package.environment>test</package.environment>
+                              
+                               <!-- google vps mongo -->
+                              <mongo.google.host>127.0.0.1</mongo.google.host>
+                              <mongo.google.port>27017</mongo.google.port>
+                              <mongo.google.dbname>spider_55haitao</mongo.google.dbname>
+                              <mongo.google.user></mongo.google.user>
+                              <mongo.google.passwd></mongo.google.passwd>
+                              
+                              <!-- mongo -->
+                              <mongo.host>127.0.0.1</mongo.host>
+                              <mongo.port>27017</mongo.port>
+                              <mongo.dbname>spider_55haitao</mongo.dbname>
+                              <mongo.user></mongo.user>
+                              <mongo.passwd></mongo.passwd>
+                              
+                              <!-- mysql -->
+                              <mysql.host>127.0.0.1</mysql.host>
+                              <mysql.port>3306</mysql.port>
+                              <mysql.username>root</mysql.username>
+                              <mysql.password>liushizhen</mysql.password>
+                              <mysql.dbname>spider_55haitao</mysql.dbname>
+                              <mysql.driverClassName>com.mysql.jdbc.Driver</mysql.driverClassName>
+                              <mysql.initialSize>3</mysql.initialSize>
+                              <mysql.minIdle>10</mysql.minIdle>
+                              <mysql.maxIdle>15</mysql.maxIdle>
+                              <mysql.maxActive>20</mysql.maxActive>
+                              <mysql.maxWait>60000</mysql.maxWait>
+                              <mysql.timeBetweenEvictionRunsMillis>60000</mysql.timeBetweenEvictionRunsMillis>
+                              <mysql.minEvictableIdleTimeMillis>300000</mysql.minEvictableIdleTimeMillis>
+                              <mysql.validationQuery>SELECT 'x'</mysql.validationQuery>
+                              <mysql.testWhileIdle>true</mysql.testWhileIdle>
+                              <mysql.testOnBorrow>false</mysql.testOnBorrow>
+                              <mysql.testOnReturn>false</mysql.testOnReturn>
+                              
+                              <!-- region -->
+                              <region>region</region>
+                              
+                              <!-- kafka -->
+                              <kafka.haitao.topic.realtime>spider_crawler_55haitao</kafka.haitao.topic.realtime>
+                              <kafka.haitao.key>www.6pm.com</kafka.haitao.key>
+                              <kafka.bootstrap.servers>127.0.0.1:9092</kafka.bootstrap.servers>
+                              <kafka.acks>all</kafka.acks>
+                              <kafka.retries>3</kafka.retries>
+                              <kafka.batch.size>16384</kafka.batch.size>
+                              <kafka.linger.ms>1</kafka.linger.ms>
+                              <kafka.buffer.memory>33554432</kafka.buffer.memory>
+                              <kafka.key.serializer>org.apache.kafka.common.serialization.StringSerializer</kafka.key.serializer>
+                              <kafka.value.serializer>org.apache.kafka.common.serialization.StringSerializer</kafka.value.serializer>
+                              
+                              <redis>redis://:spider55haitao@127.0.0.1:6379</redis>
+                              
+                               <!-- upyun -->
+							  <upyun.bucketName>spider-prerelease</upyun.bucketName>
+							  <upyun.userName>shantao</upyun.userName>
+							  <upyun.password>qDnnAdOTfpoWc</upyun.password>
+							  <upyun.address>http://spider-prerelease.b0.upaiyun.com</upyun.address>
+                      </properties>
+              </profile>
+              <profile>
+                  <id>prerelease</id>
+                      <properties>
+                              <!-- 控制打包加载不同环境application.xml -->
+                              <active.profile>prerelease</active.profile>
+                              <package.environment>prerelease</package.environment>
+                              
+                               <!-- google vps mongo -->
+                              <mongo.google.host>10.26.197.128</mongo.google.host>
+                              <mongo.google.port>27017</mongo.google.port>
+                              <mongo.google.dbname>spider_55haitao</mongo.google.dbname>
+                              <mongo.google.user></mongo.google.user>
+                              <mongo.google.passwd></mongo.google.passwd>
+                              
+                              <!-- mongo -->
+                              <mongo.host>10.26.197.128</mongo.host>
+                              <mongo.port>27017</mongo.port>
+                              <mongo.dbname>spider_55haitao</mongo.dbname>
+                              <mongo.user></mongo.user>
+                              <mongo.passwd></mongo.passwd>
+                              
+                              <!-- mysql -->
+                              <mysql.host>10.26.197.128</mysql.host>
+                              <mysql.port>3306</mysql.port>
+                              <mysql.username>spider</mysql.username>
+                              <mysql.password>spider_55haitao</mysql.password>
+                              <mysql.dbname>spider_55haitao_prerelease</mysql.dbname>
+                              <mysql.driverClassName>com.mysql.jdbc.Driver</mysql.driverClassName>
+                              <mysql.initialSize>3</mysql.initialSize>
+                              <mysql.minIdle>10</mysql.minIdle>
+                              <mysql.maxIdle>15</mysql.maxIdle>
+                              <mysql.maxActive>20</mysql.maxActive>
+                              <mysql.maxWait>60000</mysql.maxWait>
+                              <mysql.timeBetweenEvictionRunsMillis>60000</mysql.timeBetweenEvictionRunsMillis>
+                              <mysql.minEvictableIdleTimeMillis>300000</mysql.minEvictableIdleTimeMillis>
+                              <mysql.validationQuery>SELECT 'x'</mysql.validationQuery>
+                              <mysql.testWhileIdle>true</mysql.testWhileIdle>
+                              <mysql.testOnBorrow>false</mysql.testOnBorrow>
+                              <mysql.testOnReturn>false</mysql.testOnReturn>
+                              
+                              <!-- region -->
+                              <region>region</region>
+                              
+                              <!-- kafka -->
+                              <kafka.haitao.topic.realtime>spider_55haitao_prerelease</kafka.haitao.topic.realtime>
+                              <kafka.bootstrap.servers>10.26.197.128:9092</kafka.bootstrap.servers>
+                              <kafka.acks>all</kafka.acks>
+                              <kafka.retries>3</kafka.retries>
+                              <kafka.batch.size>16384</kafka.batch.size>
+                              <kafka.linger.ms>1</kafka.linger.ms>
+                              <kafka.buffer.memory>33554432</kafka.buffer.memory>
+                              <kafka.key.serializer>org.apache.kafka.common.serialization.StringSerializer</kafka.key.serializer>
+                              <kafka.value.serializer>org.apache.kafka.common.serialization.StringSerializer</kafka.value.serializer>
+                              
+                              <redis>redis://:spider55haitao@10.26.197.128:6379</redis>
+                              
+                               <!-- upyun -->
+							  <upyun.bucketName>spider-prerelease</upyun.bucketName>
+							  <upyun.userName>shantao</upyun.userName>
+							  <upyun.password>qDnnAdOTfpoWc</upyun.password>
+							  <upyun.address>http://spider-prerelease.b0.upaiyun.com</upyun.address>
+							  <!-- google核价标识 -->
+							  <google.realtime></google.realtime>
+                      </properties>
+              </profile>
+              <profile>
+                  <id>product</id>
+                      <properties>
+                              <!-- 控制打包加载不同环境application.xml -->
+                              <active.profile>product</active.profile>
+                              
+                              <package.environment>product</package.environment>
+                              
+                              <!-- google vps mongo -->
+<!--                               <mongo.google.host>10.26.97.231</mongo.google.host> -->
+                              <mongo.google.host>10.26.197.117</mongo.google.host>
+                              <mongo.google.port>9352</mongo.google.port>
+                              <mongo.google.dbname>spider_55haitao</mongo.google.dbname>
+                              <mongo.google.user></mongo.google.user>
+                              <mongo.google.passwd></mongo.google.passwd>
+                              
+                              <!-- mongo -->
+<!-- 							  <mongo.rs>10.47.123.138:27017,10.47.123.178:27017,10.46.69.124:27017</mongo.rs> -->
+                              <mongo.rs>dds-bp1d36186b2d7c741.mongodb.rds.aliyuncs.com:3717,dds-bp1d36186b2d7c742.mongodb.rds.aliyuncs.com:3717</mongo.rs>
+                              <mongo.uri>55haitao:spider_55haitao@admin</mongo.uri>
+                              <mongo.dbname>spider_55haitao</mongo.dbname>
+                              
+                              <!-- mysql -->
+                              <mysql.host>10.26.197.128</mysql.host>
+                              <mysql.port>3306</mysql.port>
+                              <mysql.username>spider</mysql.username>
+                              <mysql.password>spider_55haitao</mysql.password>
+                              <mysql.dbname>spider_55haitao</mysql.dbname>
+                              <mysql.driverClassName>com.mysql.jdbc.Driver</mysql.driverClassName>
+                              <mysql.initialSize>3</mysql.initialSize>
+                              <mysql.minIdle>10</mysql.minIdle>
+                              <mysql.maxIdle>15</mysql.maxIdle>
+                              <mysql.maxActive>20</mysql.maxActive>
+                              <mysql.maxWait>60000</mysql.maxWait>
+                              <mysql.timeBetweenEvictionRunsMillis>60000</mysql.timeBetweenEvictionRunsMillis>
+                              <mysql.minEvictableIdleTimeMillis>300000</mysql.minEvictableIdleTimeMillis>
+                              <mysql.validationQuery>SELECT 'x'</mysql.validationQuery>
+                              <mysql.testWhileIdle>true</mysql.testWhileIdle>
+                              <mysql.testOnBorrow>false</mysql.testOnBorrow>
+                              <mysql.testOnReturn>false</mysql.testOnReturn>
+                              
+                              <!-- region -->
+                              <region>region</region>
+                              
+                              <!-- kafka -->
+                              <kafka.haitao.topic.realtime>spider_55haitao_product</kafka.haitao.topic.realtime>
+                              <kafka.bootstrap.servers>10.24.32.17:9092,10.45.22.63:9093</kafka.bootstrap.servers>
+                              <kafka.acks>all</kafka.acks>
+                              <kafka.retries>3</kafka.retries>
+                              <kafka.batch.size>16384</kafka.batch.size>
+                              <kafka.linger.ms>1</kafka.linger.ms>
+                              <kafka.buffer.memory>33554432</kafka.buffer.memory>
+                              <kafka.key.serializer>org.apache.kafka.common.serialization.StringSerializer</kafka.key.serializer>
+                              <kafka.value.serializer>org.apache.kafka.common.serialization.StringSerializer</kafka.value.serializer>
+                              
+                              <redis>redis://:spider55haitao@10.24.32.17:12002</redis>
+                              
+
+							  <!-- upyun -->
+							  <upyun.bucketName>st-prod</upyun.bucketName>
+							  <upyun.userName>shantao</upyun.userName>
+							  <upyun.password>qDnnAdOTfpoWc</upyun.password>
+							  <upyun.address>http://st-prod.b0.upaiyun.com</upyun.address>
+							  
+							  <!-- google核价标识 -->
+							  <google.realtime></google.realtime>
+                      </properties>
+              </profile>
+              <profile>
+                  <id>google_product</id>
+                      <properties>
+                              <!-- 控制打包加载不同环境application.xml -->
+                              <active.profile>google_product</active.profile>
+                              
+                              <package.environment>google_product</package.environment>
+                              
+                              <!-- google vps mongo -->
+                              <mongo.google.host>10.128.0.2</mongo.google.host>
+                              <mongo.google.port>27017</mongo.google.port>
+                              <mongo.google.dbname>spider_55haitao</mongo.google.dbname>
+                              <mongo.google.user></mongo.google.user>
+                              <mongo.google.passwd></mongo.google.passwd>
+
+							 <!-- ali vps mongo -->
+<!--   							  <mongo.rs>120.55.242.22:27017,120.55.189.15:27017,121.196.226.81:27017</mongo.rs> -->
+  							  <mongo.rs>dds-bp1d36186b2d7c741.mongodb.rds.aliyuncs.com:3717,dds-bp1d36186b2d7c742.mongodb.rds.aliyuncs.com:3717</mongo.rs>
+                              <mongo.uri>55haitao:spider_55haitao@admin</mongo.uri>
+                              <mongo.dbname>spider_55haitao</mongo.dbname>
+                                                            
+                              <!-- mysql -->
+                              <mysql.host>10.128.0.2</mysql.host>
+                              <mysql.port>3306</mysql.port>
+                              <mysql.username>spider_55haitao</mysql.username>
+                              <mysql.password>spider_55haitao</mysql.password>
+                              <mysql.dbname>spider_55haitao</mysql.dbname>
+                              <mysql.driverClassName>com.mysql.jdbc.Driver</mysql.driverClassName>
+                              <mysql.initialSize>3</mysql.initialSize>
+                              <mysql.minIdle>10</mysql.minIdle>
+                              <mysql.maxIdle>15</mysql.maxIdle>
+                              <mysql.maxActive>20</mysql.maxActive>
+                              <mysql.maxWait>60000</mysql.maxWait>
+                              <mysql.timeBetweenEvictionRunsMillis>60000</mysql.timeBetweenEvictionRunsMillis>
+                              <mysql.minEvictableIdleTimeMillis>300000</mysql.minEvictableIdleTimeMillis>
+                              <mysql.validationQuery>SELECT 'x'</mysql.validationQuery>
+                              <mysql.testWhileIdle>true</mysql.testWhileIdle>
+                              <mysql.testOnBorrow>false</mysql.testOnBorrow>
+                              <mysql.testOnReturn>false</mysql.testOnReturn>
+                              
+                              <!-- region -->
+                              <region>region</region>
+                              
+                              <!-- kafka -->
+                              <kafka.haitao.topic.realtime>spider_55haitao_product</kafka.haitao.topic.realtime>
+                              <kafka.bootstrap.servers>114.55.61.171:9092,114.55.57.110:9093</kafka.bootstrap.servers>
+                              <kafka.acks>all</kafka.acks>
+                              <kafka.retries>3</kafka.retries>
+                              <kafka.batch.size>16384</kafka.batch.size>
+                              <kafka.linger.ms>1</kafka.linger.ms>
+                              <kafka.buffer.memory>33554432</kafka.buffer.memory>
+                              <kafka.key.serializer>org.apache.kafka.common.serialization.StringSerializer</kafka.key.serializer>
+                              <kafka.value.serializer>org.apache.kafka.common.serialization.StringSerializer</kafka.value.serializer>
+                              
+                              <redis>redis://:spider55haitao@10.128.0.2:6379</redis>
+                              
+
+							  <!-- upyun -->
+							  <upyun.bucketName>st-prod</upyun.bucketName>
+							  <upyun.userName>shantao</upyun.userName>
+							  <upyun.password>qDnnAdOTfpoWc</upyun.password>
+							  <upyun.address>http://st-prod.b0.upaiyun.com</upyun.address>
+							  
+							  <!-- google核价标识 -->
+							  <google.realtime>google</google.realtime>
+                      </properties>
+              </profile>
+      </profiles>
+</project>

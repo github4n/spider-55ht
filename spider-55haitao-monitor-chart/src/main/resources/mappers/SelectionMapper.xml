@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.haitao55.spider.chart.dao.RealTimeSectionDao">
+	<select id="selectByTime" parameterType="java.util.Map" resultType="com.haitao55.spider.chart.entity.RealTimeSection">
+		SELECT  SUM(count) as count, time_section as timeSection
+		FROM statistics_realtime_time_section
+		WHERE execute_time BETWEEN #{startTime} AND #{endTime}
+		GROUP BY time_section
+	</select>
+</mapper>

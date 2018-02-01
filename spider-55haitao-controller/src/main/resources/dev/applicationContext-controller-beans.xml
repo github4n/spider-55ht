@@ -1,0 +1,264 @@
+<?xml version="1.0"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:cache="http://www.springframework.org/schema/cache"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-3.2.xsd
+    http://www.springframework.org/schema/mvc
+    http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+    http://www.springframework.org/schema/aop
+    http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+    http://www.springframework.org/schema/tx 
+	http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+    http://www.springframework.org/schema/data/mongo
+    http://www.springframework.org/schema/data/mongo/spring-mongo-1.4.xsd
+    http://www.springframework.org/schema/cache
+    http://www.springframework.org/schema/cache/spring-cache-3.2.xsd
+    http://www.springframework.org/schema/util
+    http://www.springframework.org/schema/util/spring-util-3.2.xsd">
+    
+<!--     <import resource="mybatis/mybatis-beans.xml" /> -->
+    	<!-- 开启注解扫描 -->
+	<context:component-scan base-package="com.haitao55.spider.ui,com.haitao55.spider.common.dao"></context:component-scan>
+	 <!-- To translate any MongoExceptions thrown in @Repository annotated classes -->   
+    <context:annotation-config />
+    
+    <mvc:annotation-driven/>
+    
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>file:config/config.properties</value>
+            </list>
+        </property>
+    </bean>
+    
+    
+    <!-- spring 整合mybatis -->
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+		<property name="url" value="jdbc:mysql://${mysql.host}:${mysql.port}/${mysql.dbname}" />
+		<property name="driverClassName" value="${mysql.driverClassName}" />
+		<property name="username" value="${mysql.username}" />
+		<property name="password" value="${mysql.password}" />
+		<!-- 配置初始化大小、最小、最大 -->
+	    <property name="initialSize" value="${mysql.initialSize}" />
+	    <property name="minIdle" value="${mysql.minIdle}" />
+	    <property name="maxActive" value="${mysql.maxActive}" />
+	 
+	    <!-- 配置获取连接等待超时的时间 -->
+	    <property name="maxWait" value="${mysql.maxWait}" />
+	 
+	    <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+	    <property name="timeBetweenEvictionRunsMillis" value="${mysql.timeBetweenEvictionRunsMillis}" />
+	 
+	    <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+	    <property name="minEvictableIdleTimeMillis" value="${mysql.minEvictableIdleTimeMillis}" />
+	 
+	    <property name="validationQuery" value="${mysql.validationQuery}" />
+	    <property name="testWhileIdle" value="${mysql.testWhileIdle}" />
+	    <property name="testOnBorrow" value="${mysql.testOnBorrow}" />
+	    <property name="testOnReturn" value="${mysql.testOnReturn}" />
+	</bean>
+	
+    
+    
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="mapperLocations" value="classpath:mybatis/*Mapper.xml"></property>
+        <property name="typeAliasesPackage" value="com.haitao55.spider.common.dos"/>
+         <property name="plugins">
+            <array>
+                <bean class="com.haitao55.spider.common.interceptors.MybatisInterceptor"></bean>
+            </array>
+        </property>
+    </bean>
+    
+    <!-- Mapper接口所在包名，Spring会自动查找其下的类 -->  
+    <bean class="tk.mybatis.spring.mapper.MapperScannerConfigurer">  
+        <property name="basePackage" value="com.haitao55.spider.common.dao.impl.mysql" />  
+        <!-- 3.2.2版本新特性，markerInterface可以起到mappers配置的作用，详细情况需要看Marker接口类 -->
+        <property name="markerInterface" value="com.haitao55.spider.common.util.MyMapper"/>
+<!--         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>   -->
+    </bean> 
+    
+    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate" scope="prototype">
+        <constructor-arg index="0" ref="sqlSessionFactory"/>
+    </bean>
+    
+    <!-- 事务管理器 -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    
+     
+	  <tx:advice id="txAdvice" transaction-manager="transactionManager">
+	    <tx:attributes>
+	      <tx:method name="delete*" propagation="REQUIRED" read-only="false"/>
+	      <tx:method name="insert*" propagation="REQUIRED" read-only="false"/>
+	      <tx:method name="update*" propagation="REQUIRED" read-only="false"/>
+	      <tx:method name="find*" propagation="SUPPORTS"/>
+	      <tx:method name="get*" propagation="SUPPORTS"/>
+	      <tx:method name="select*" propagation="SUPPORTS"/>
+	    </tx:attributes>
+	  </tx:advice>
+	  
+	  <aop:config proxy-target-class="true">    
+	    <aop:pointcut id="pc" expression="execution(* *..service*..*(..))" /> <!--把事务控制在Service层-->
+	    <aop:advisor pointcut-ref="pc" advice-ref="txAdvice" />
+	  </aop:config>
+    
+    
+    <!-- mongodb config -->
+<!--     <mongo:mongo host="${mongo.host}" port="${mongo.port}"/>  -->
+<!--     <mongo:db-factory id="controllerMongoFactory" mongo-ref="mongo" dbname="${mongo.dbname}" username="${mongo.user}" password="${mongo.passwd}"/> -->
+<!--     <bean id="controllerMongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate"> -->
+<!--         <constructor-arg name="mongoDbFactory" ref="controllerMongoFactory"/> -->
+<!--     </bean> -->
+    
+     <mongo:mongo-client id="mongoClient" credentials="${mongo.user}:${mongo.passwd}@${mongo.dbname}" replica-set="${mongo.rs}"/>
+	 <mongo:db-factory id="controllerMongoFactory"  mongo-ref="mongoClient" />
+	 <mongo:template id="controllerMongoTemplate" db-factory-ref="controllerMongoFactory"/>
+    
+    
+    <!-- services -->
+    <bean id="bootstrap" class="com.haitao55.spider.controller.Bootstrap" init-method="init">
+        <property name="thriftConfig">
+            <map>
+                <entry key="port" value="${thrift.port}"/>
+                <entry key="workerNum" value="${thrift.worker.num}"/>
+                <entry key="selectorNum" value="${thrift.selector.num}"/>
+                <entry key="acceptQueueSize" value="${thrift.accept.queue.size}"/>
+                <entry key="readBufSize" value="${thrift.read.buf.size}"/>
+                <entry key="clientTimeout" value="${thrift.client.timeout}"/>
+            </map>
+        </property>
+        <property name="controllerService" ref="controllerService"/>
+    </bean>
+    
+    <bean id="controllerService" class="com.haitao55.spider.controller.service.impl.ControllerService">
+        <property name="proxyDAO" ref="proxyDAO"/>
+        <property name="taskDAO" ref="taskDAO"/>
+        <property name="itemDAO" ref="itemDAO" />
+        <property name="urlDAO" ref="urlDAO" />
+        <property name="monitorService" ref="monitorService" />
+    </bean>
+    
+    <bean id="monitorService" class="com.haitao55.spider.common.service.impl.MonitorServiceImpl">
+		<constructor-arg name="namespace" value="spider.haitao55"/>
+        <constructor-arg name="name" value="controller"/>
+	</bean>
+    
+    <!-- DAOs -->
+    <bean id="baseMongoDAO" class="com.haitao55.spider.common.dao.impl.mongo.BaseMongoDAO" abstract="true">
+    	<property name="mongoTemplate" ref="controllerMongoTemplate" />
+    </bean>
+    
+    <bean id="urlDAO" class="com.haitao55.spider.common.dao.impl.mongo.UrlDAOImpl" parent="baseMongoDAO" />
+    
+    <bean id="itemDAO" class="com.haitao55.spider.common.dao.impl.mongo.ItemDAOImpl" parent="baseMongoDAO" />
+    
+    <bean id="taskDAO" class="com.haitao55.spider.common.dao.impl.TaskDaoImpl" />
+    
+    <bean id="proxyDAO" class="com.haitao55.spider.common.dao.impl.ProxyDAOImpl" />
+    
+    <!-- scheduled job bean -->
+    <bean id="controllerJobBean" class="com.haitao55.spider.controller.job.ControllerJobBean" >
+    	<property name="taskDAO" ref="taskDAO"/>
+        <property name="itemDAO" ref="itemDAO" />
+        <property name="urlDAO" ref="urlDAO" />
+        <property name="monitorService" ref="monitorService" />
+    </bean>
+    
+    <!-- ========================= Schedule task config ========================= -->
+    <bean id="cleanTaskRatioCacheJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="controllerJobBean"/>
+        <property name="targetMethod" value="cleanTaskRatioCache"/>
+    </bean>
+    <bean id="cleanTaskRatioCacheTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="cleanTaskRatioCacheJob"/>
+        <property name="cronExpression">
+             <value>0/10 * * * * ?</value>
+        </property>
+    </bean>
+    
+    
+    <bean id="hangupAutomaticJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="controllerJobBean"/>
+        <property name="targetMethod" value="hangupAutomaticTask"/>
+    </bean>
+    <bean id="hangupAutomaticTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="hangupAutomaticJob"/>
+        <property name="cronExpression">
+             <value>0/10 * * * * ?</value>
+        </property>
+    </bean>
+    
+     <bean id="startupAutomaticJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="controllerJobBean"/>
+        <property name="targetMethod" value="startupAutomaticTask"/>
+    </bean>
+    <bean id="startupAutomaticTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="startupAutomaticJob"/>
+        <property name="cronExpression">
+             <value>0/10 * * * * ?</value>
+        </property>
+    </bean>
+    
+      <bean id="reloadHotJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="controllerJobBean"/>
+        <property name="targetMethod" value="reloadHotTasks"/>
+    </bean>
+    <bean id="reloadHotTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="reloadHotJob"/>
+        <property name="cronExpression">
+             <value>0/10 * * * * ?</value>
+        </property>
+    </bean>
+    
+    <!-- 检测丢弃中状态到手动任务,mongo中不存在对应urls,则修改状态为 V -->
+      <bean id="updateManualDiscardingToVoidJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="controllerJobBean"/>
+        <property name="targetMethod" value="updateManualDiscardingToVoid"/>
+    </bean>
+    <bean id="updateManualDiscardingToVoidTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="updateManualDiscardingToVoidJob"/>
+        <property name="cronExpression">
+             <value>0/30 * * * * ?</value>
+        </property>
+    </bean>
+    
+     <!-- 更新统计信息表数据 count-->
+      <bean id="updateStatisticsFigureJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="controllerJobBean"/>
+        <property name="targetMethod" value="updateStatisticsFigure"/>
+    </bean>
+    <bean id="updateStatisticsFigureTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="updateStatisticsFigureJob"/>
+        <property name="cronExpression">
+        	<!--每3秒执行  -->
+             <value>0/3 * * * * ?</value>
+        </property>
+    </bean>
+    
+    <bean id="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean"> 
+        <property name="triggers"> 
+            <list>
+                <ref bean="cleanTaskRatioCacheTrigger"/>
+                <ref bean="hangupAutomaticTrigger"/>
+                <ref bean="startupAutomaticTrigger"/>
+                <ref bean="reloadHotTrigger"/>
+                <ref bean="updateManualDiscardingToVoidTrigger"/>
+                <ref bean="updateStatisticsFigureTrigger"/>
+            </list> 
+        </property> 
+    </bean>
+</beans>

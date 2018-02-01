@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!-- 配置别名：MyBatis3的别名需要配置在这个全局文件中，而不像2一样配置在各个模块的mapper文件中 -->
+	<typeAliases>
+		<typeAlias type="com.haitao55.spider.common.dos.TaskDO" alias="TaskDO" />
+		<typeAlias type="com.haitao55.spider.common.dos.ProxyDO" alias="ProxyDO" />
+	</typeAliases>
+
+	<!-- 配置mappers,这里貌似不能使用jar包外部的mapper.xml文件,只能使用打在jar包内部的mapper.xml文件 -->
+	<mappers>
+		<mapper resource="mybatis/TaskMapper.xml" />
+		<mapper resource="mybatis/ProxyMapper.xml" />
+	</mappers>
+</configuration>

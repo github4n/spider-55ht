@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.haitao55.spider.common.dao.impl.mysql.ProxyMapper">
+	<sql id="allColumns">
+		id, region_id as regionId, region_name as regionName, ip, port
+	</sql>
+
+	<select id="getAllProxies" resultType="ProxyDO">
+		select
+		<include refid="allColumns" />
+		from proxy;
+	</select>
+</mapper>

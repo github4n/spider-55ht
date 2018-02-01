@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop 
+		http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/tx 
+		http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/data/mongo
+    	http://www.springframework.org/schema/data/mongo/spring-mongo-1.4.xsd
+    	http://www.springframework.org/schema/mvc
+    	http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+    
+	<!-- 开启注解扫描 -->
+	<context:component-scan base-package="com.haitao55.spider.ui,com.haitao55.spider.common.dao,com.haitao55.spider.order_robot"></context:component-scan>
+	 <!-- To translate any MongoExceptions thrown in @Repository annotated classes -->   
+    <context:annotation-config />
+    
+	<!-- 使用properties文件，使初始化数据的配置集中在一处 -->
+	<bean id="configProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		 <property name="locations">
+			<list>
+				<value>classpath*:config.properties</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer">
+		 <property name="properties" ref="configProperties"/>
+	</bean>
+
+	<!-- spring 整合mybatis -->
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+		<property name="url" value="jdbc:mysql://${mysql.host}:${mysql.port}/${mysql.dbname}" />
+		<property name="driverClassName" value="${mysql.driverClassName}" />
+		<property name="username" value="${mysql.username}" />
+		<property name="password" value="${mysql.password}" />
+		<!-- 配置初始化大小、最小、最大 -->
+		<property name="initialSize" value="${mysql.initialSize}" />
+		<property name="minIdle" value="${mysql.minIdle}" />
+		<property name="maxActive" value="${mysql.maxActive}" />
+		<!-- 配置获取连接等待超时的时间 -->
+		<property name="maxWait" value="${mysql.maxWait}" />
+		<!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+		<property name="timeBetweenEvictionRunsMillis" value="${mysql.timeBetweenEvictionRunsMillis}" />
+		<!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+		<property name="minEvictableIdleTimeMillis" value="${mysql.minEvictableIdleTimeMillis}" />
+		<property name="validationQuery" value="${mysql.validationQuery}" />
+		<property name="testWhileIdle" value="${mysql.testWhileIdle}" />
+		<property name="testOnBorrow" value="${mysql.testOnBorrow}" />
+		<property name="testOnReturn" value="${mysql.testOnReturn}" />
+	</bean>
+	
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="mapperLocations" value="classpath:mappers/*.xml"></property>
+        <property name="typeAliasesPackage" value="com.haitao55.spider.common.dos"/>
+        <property name="plugins">
+            <array>
+                <bean class="com.github.pagehelper.PageHelper">
+                    <!-- 这里的几个配置主要演示如何使用，如果不理解，一定要去掉下面的配置 -->
+                    <property name="properties">
+                        <value>
+                            dialect=mysql
+                            reasonable=true
+                            supportMethodsArguments=true
+                            params=count=countSql
+                            autoRuntimeDialect=true
+                        </value>
+                    </property>
+                </bean>
+                <bean class="com.haitao55.spider.common.interceptors.MybatisInterceptor"></bean>
+            </array>
+        </property>
+    </bean>
+    
+    <!-- Mapper接口所在包名，Spring会自动查找其下的类 -->  
+    <bean class="tk.mybatis.spring.mapper.MapperScannerConfigurer">  
+        <property name="basePackage" value="com.haitao55.spider.common.dao.impl.mysql" />  
+        <!-- 3.2.2版本新特性，markerInterface可以起到mappers配置的作用，详细情况需要看Marker接口类 -->
+        <property name="markerInterface" value="com.haitao55.spider.common.util.MyMapper"/>
+<!--         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>   -->
+    </bean> 
+    
+    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate" scope="prototype">
+        <constructor-arg index="0" ref="sqlSessionFactory"/>
+    </bean>
+    
+    <!-- 事务管理器 -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+	  <tx:advice id="txAdvice" transaction-manager="transactionManager">
+	    <tx:attributes>
+	      <tx:method name="delete*" propagation="REQUIRED" read-only="false"/>
+	      <tx:method name="insert*" propagation="REQUIRED" read-only="false"/>
+	      <tx:method name="update*" propagation="REQUIRED" read-only="false"/>
+	      <tx:method name="find*" propagation="SUPPORTS"/>
+	      <tx:method name="get*" propagation="SUPPORTS"/>
+	      <tx:method name="select*" propagation="SUPPORTS"/>
+	    </tx:attributes>
+	  </tx:advice>
+	  
+	  <aop:config>    
+	    <aop:pointcut id="pc" expression="execution(* *..service*..*(..))" /> <!--把事务控制在Service层-->
+	    <aop:advisor pointcut-ref="pc" advice-ref="txAdvice" />
+	  </aop:config>
+    
+	<!-- DAOs -->
+	<mongo:mongo host="${mongo.host}" port="${mongo.port}" />
+	<mongo:db-factory id="mongoDbFactory" mongo-ref="mongo" dbname="${mongo.dbname}" username="${mongo.user}" password="${mongo.passwd}" />
+    <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+        <constructor-arg name="mongoDbFactory" ref="mongoDbFactory" />
+    </bean>
+    
+    <bean id="baseMongoDAO" class="com.haitao55.spider.common.dao.impl.mongo.BaseMongoDAO" abstract="true" >
+	<property name="mongoTemplate" ref="mongoTemplate" />
+    </bean>
+</beans>

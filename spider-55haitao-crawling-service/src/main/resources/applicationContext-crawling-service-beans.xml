@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop 
+		http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/tx 
+		http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/data/mongo
+    	http://www.springframework.org/schema/data/mongo/spring-mongo-1.4.xsd">
+	
+	<!-- 开启注解扫描 -->
+	<context:component-scan base-package="com.haitao55.spider.crawling,com.haitao55.spider.common.dao.impl.mongo"></context:component-scan>
+	 <!-- To translate any MongoExceptions thrown in @Repository annotated classes -->   
+    <context:annotation-config />
+	<!-- 使用properties文件，使初始化数据的配置集中在一处 -->
+	<bean id="configProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		 <property name="locations">
+			<list>
+				<value>classpath*:config.properties</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer">
+		 <property name="properties" ref="configProperties"/>
+	</bean>
+	
+	<!-- DAOs -->
+	<!--ali vps mongo DAOs -->
+	<mongo:mongo id="alimongo" host="${mongo.host}" port="${mongo.port}"/>
+	<mongo:db-factory id="mongoFactory" mongo-ref="alimongo" dbname="${mongo.dbname}" username="${mongo.user}" password="${mongo.passwd}" />
+	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+		<constructor-arg name="mongoDbFactory" ref="mongoFactory" />
+	</bean>
+
+	<bean id="baseMongoDAO" class="com.haitao55.spider.common.dao.impl.mongo.BaseMongoDAO" abstract="true">
+		<property name="mongoTemplate" ref="mongoTemplate" />
+	</bean>
+	
+	 <bean id="linkHaiTaoDAO" class="com.haitao55.spider.common.dao.impl.mongo.LinkHaitaoDAOImpl" parent="baseMongoDAO"/>
+	
+	
+	<bean id="xiaoHongShuService" class="com.haitao55.spider.crawling.service.service.impl.XiaoHongShuServiceImpl">
+		<property name="upaiyunImageService" ref="upaiyunImageService" />
+	</bean>
+		<bean id="upaiyunImageService" class="com.haitao55.spider.crawling.service.service.impl.UpaiyunImageServiceImpl">
+		<property name="upyun" ref="upyun" />
+		<property name="upyunAddress" value="${upyun.address.service}" />
+	</bean>
+	<bean id="upyun" class="main.java.com.UpYun">
+		<constructor-arg index="0" value="${upyun.bucketName.service}"/>
+		<constructor-arg index="1" value="${upyun.userName.service}"/>
+		<constructor-arg index="2" value="${upyun.password.service}"/>
+	</bean>
+	
+	<!-- 定时抓取6pm新品数据 -->
+<!-- 	<bean id="sixpmNewCrawlerJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="newCrawler"/>
+        <property name="targetMethod" value="sixpmNewCrawler"/>
+    </bean>	
+    <bean id="sixpmNewCrawlerTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="sixpmNewCrawlerJob"/>
+        <property name="cronExpression">
+            <value>0 0 0/4 * * ?</value>
+        </property>
+    </bean>
+    
+    定时抓取zappos新品数据
+	<bean id="zapposNewCrawlerJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="newCrawler"/>
+        <property name="targetMethod" value="zapposNewCrawler"/>
+    </bean>	
+    <bean id="zapposNewCrawlerTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="zapposNewCrawlerJob"/>
+        <property name="cronExpression">
+            <value>0 0 0/2 * * ?</value>
+        </property>
+    </bean>
+    
+    <bean id="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers">
+            <list>
+                <ref bean="sixpmNewCrawlerTrigger"/>
+                <ref bean="zapposNewCrawlerTrigger"/>
+            </list>
+        </property>
+    </bean> -->
+</beans>

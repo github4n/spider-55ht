@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop 
+		http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/tx 
+		http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/data/mongo
+    	http://www.springframework.org/schema/data/mongo/spring-mongo-1.4.xsd">
+	
+	<!-- 开启注解扫描 -->
+	 <!-- To translate any MongoExceptions thrown in @Repository annotated classes -->   
+	<!-- 使用properties文件，使初始化数据的配置集中在一处 -->
+	<bean id="configProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		 <property name="locations">
+			<list>
+				<value>classpath*:config.properties</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer">
+		 <property name="properties" ref="configProperties"/>
+	</bean>
+	
+	<bean id="imageService" class="com.haitao55.spider.image.server.service.impl.ImageServiceImpl">
+		<property name="upyun" ref="upyun" />
+		<property name="upyunAddress" value="${upyun.address.service}" />
+	</bean> 
+	
+	<bean id="upyun" class="main.java.com.UpYun">
+		<constructor-arg index="0" value="${upyun.bucketName.service}"/>
+		<constructor-arg index="1" value="${upyun.userName.service}"/>
+		<constructor-arg index="2" value="${upyun.password.service}"/>
+	</bean>
+	
+</beans>

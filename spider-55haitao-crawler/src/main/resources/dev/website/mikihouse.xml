@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rules xmlns="http://www.55haitao.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+
+	<rule grade="0">
+		<selecturls input="${doc}" css="select.selector option"  attr="value" type="LINK" output="newurls" grade="1"/>
+　　　　　　　　　<concaturls prefix="http://www.mikihouse.jp/ciao/shopping/KeyReference_r.asp?MlIt_G=" contains="?" />
+　　	</rule>	
+
+	<rule grade="1">
+		<selectpages input="${doc}" cssTemplateUrl="div.mt10 td#anothercolor a:last-child" attrTemplateUrl="abs:href" cssTotalPages="div#contentsWrap2 td:last-child div[class=mt10] td a:nth-last-child(2)" attrTotalPages="text" replaceRegex="St=\d+" replaceFormat="St={}" startIndex="1" type="LINK" grade="2" output="newurls" />
+		<selecturls input="${doc}" css="div.pic a" attr="abs:href" type="ITEM" grade="3" output="newurls" />
+	</rule>
+
+	<rule grade="2">
+		<selecturls input="${doc}" css="div.pic a" attr="abs:href"  type="ITEM" grade="3" output="newurls" />
+　　　　　　　　　
+	</rule>
+
+        <rule regex=".*www.mikihouse.jp.*" grade="3">
+                <mikihouse input="${doc}" output="retbody" />
+		<output channel="file" fields="retbody" />
+        </rule>
+
+</rules>
